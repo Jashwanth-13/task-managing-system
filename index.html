@@ -1,405 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Study Buddy - Productivity App</title>
-<style>
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1470&q=80');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: #fff;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.6);
-    z-index: -1;
-  }
-  h1 {
-    text-align: center;
-    margin: 30px 0 10px 0;
-    font-weight: 700;
-    font-size: 2.8rem;
-    letter-spacing: 2px;
-    text-shadow: 0 0 8px rgba(255 255 255 / 0.8);
-  }
-  p.subtitle {
-    text-align: center;
-    font-weight: 300;
-    margin-bottom: 40px;
-    font-size: 1.2rem;
-    color: #ddd;
-  }
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 25px;
-    padding: 0 20px 50px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .card {
-    background: rgba(255 255 255 / 0.1);
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    width: 320px;
-    padding: 20px 25px;
-    color: #fff;
-    backdrop-filter: blur(10px);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: fadeInUp 0.7s ease forwards;
-    opacity: 0;
-  }
-  .card:hover {
-    transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.7);
-  }
-  .todo { border-top: 5px solid #FF6B6B; }
-  .schedule { border-top: 5px solid #4ECDC4; }
-  .assignment { border-top: 5px solid #FFD93D; color: #333; background: rgba(255 217 61 / 0.15);}
-  .reminder { border-top: 5px solid #556270; }
-  .timer { border-top: 5px solid #C7F464; color: #333; background: rgba(199 244 100 / 0.15);}
-  .progress { border-top: 5px solid #FFA500; }
-  .videos { border-top: 5px solid #6A0572; }
-  .tips { border-top: 5px solid #3D3B8E; }
-  .card h2 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-weight: 700;
-    font-size: 1.5rem;
-    text-shadow: 0 0 4px rgba(0,0,0,0.6);
-  }
-  .card-content {
-    max-height: 260px;
-    overflow-y: auto;
-  }
-  @keyframes fadeInUp {
-    from {opacity: 0; transform: translateY(20px);}
-    to {opacity: 1; transform: translateY(0);}
-  }
-  button {
-    cursor: pointer;
-    background-color: #fff;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 25px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #333;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    transition: background-color 0.3s ease;
-    margin-top: 8px;
-  }
-  button:hover { background-color: #f2f2f2; }
-  input[type=text], input[type=date], input[type=datetime-local], select {
-    width: 100%;
-    padding: 8px 10px;
-    margin: 8px 0 12px 0;
-    border-radius: 8px;
-    border: none;
-    font-size: 1rem;
-    box-sizing: border-box;
-  }
-  ul.todo-list, ul {
-    list-style: none;
-    padding-left: 0;
-    max-height: 140px;
-    overflow-y: auto;
-    margin-bottom: 10px;
-  }
-  ul.todo-list li, ul li {
-    background: rgba(255 255 255 / 0.15);
-    margin-bottom: 8px;
-    padding: 8px 12px;
-    border-radius: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1rem;
-  }
-  ul.todo-list li.completed {
-    text-decoration: line-through;
-    opacity: 0.6;
-  }
-  ul.todo-list li button, ul li button {
-    background: transparent;
-    color: #fff;
-    border: none;
-    font-weight: 700;
-    font-size: 1.2rem;
-  }
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
-    border-radius: 10px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  @media (max-width: 1000px) {
-    .container { justify-content: center; }
-  }
-  @media (max-width: 680px) {
-    .card { width: 90%; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Productivity App</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1556485687-1b08e9d71e36') no-repeat center center fixed;
+      background-size: cover;
+      overflow-x: hidden;
+      height: 100vh;
+    }
+
+    .circle-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .feature {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: #fff;
+      color: #333;
+      border-radius: 50%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: transform 0.3s ease, background 0.3s;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .feature:hover {
+      transform: scale(1.1) rotate(5deg);
+      background-color: #f0f0f0;
+    }
+
+    .feature i {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .center-feature {
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 300px;
+      text-align: center;
+      font-size: 16px;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 10px #00f6ff;
+      }
+      100% {
+        box-shadow: 0 0 30px #00f6ff;
+      }
+    }
+
+    /* Floating layout */
+    .circle-container .feature:nth-child(1) { transform: translate(-220px, -220px); background: #f94144; color: white; }
+    .circle-container .feature:nth-child(2) { transform: translate(0, -300px); background: #f3722c; color: white; }
+    .circle-container .feature:nth-child(3) { transform: translate(220px, -220px); background: #f9844a; color: white; }
+    .circle-container .feature:nth-child(4) { transform: translate(300px, 0); background: #43aa8b; color: white; }
+    .circle-container .feature:nth-child(5) { transform: translate(220px, 220px); background: #577590; color: white; }
+    .circle-container .feature:nth-child(6) { transform: translate(0, 300px); background: #277da1; color: white; }
+    .circle-container .feature:nth-child(7) { transform: translate(-220px, 220px); background: #9b5de5; color: white; }
+    .circle-container .feature:nth-child(8) { transform: translate(-300px, 0); background: #8338ec; color: white; }
+
+    .video-section {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .video-section iframe {
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      width: 320px;
+      height: 180px;
+    }
+  </style>
 </head>
 <body>
+  <div class="circle-container">
+    <div class="feature"><i class="fas fa-check-square"></i>To-Do List</div>
+    <div class="feature"><i class="fas fa-calendar-alt"></i>Class Schedule</div>
+    <div class="feature"><i class="fas fa-tasks"></i>Assignments</div>
+    <div class="feature"><i class="fas fa-bell"></i>Reminders</div>
+    <div class="feature"><i class="fas fa-stopwatch"></i>Pomodoro Timer</div>
+    <div class="feature"><i class="fas fa-chart-line"></i>Progress Tracker</div>
+    <div class="feature"><i class="fas fa-lightbulb"></i>Study Tips</div>
+    <div class="feature"><i class="fas fa-play-circle"></i>Motivational Videos</div>
 
-<h1>Study Buddy - Your Productivity App</h1>
-<p class="subtitle">Manage your study tasks, schedule, and motivation all in one place!</p>
-
-<div class="container">
-
-  <!-- Daily To-Do List -->
-  <section class="card todo" id="todo-section">
-    <h2>Daily To-Do List</h2>
-    <div class="card-content">
-      <input type="text" id="todo-input" placeholder="Add new task..." />
-      <select id="priority-select">
-        <option value="High">🔴 High Priority</option>
-        <option value="Medium" selected>🟠 Medium Priority</option>
-        <option value="Low">🟢 Low Priority</option>
-      </select>
-      <button onclick="addTask()">Add Task</button>
-      <ul class="todo-list" id="todo-list"></ul>
+    <div class="center-feature">
+      <h2>💡 Student Hub</h2>
+      <p>Organize. Focus. Achieve.</p>
     </div>
-  </section>
+  </div>
 
-  <!-- Class Schedule Organizer -->
-  <section class="card schedule" id="schedule-section">
-    <h2>Class Schedule Organizer</h2>
-    <div class="card-content">
-      <input type="text" id="class-name" placeholder="Class name" />
-      <input type="text" id="class-time" placeholder="Time (e.g. 10:00 AM)" />
-      <button onclick="addClass()">Add Class</button>
-      <ul id="class-list"></ul>
-    </div>
-  </section>
+  <div class="video-section">
+    <iframe src="https://www.youtube.com/embed/UNP03fDSj1U" frameborder="0" allowfullscreen></iframe>
+  </div>
 
-  <!-- Assignment/Deadline Tracker -->
-  <section class="card assignment" id="assignment-section">
-    <h2>Assignment/Deadline Tracker</h2>
-    <div class="card-content">
-      <input type="text" id="assignment-name" placeholder="Assignment title" />
-      <input type="date" id="assignment-date" />
-      <button onclick="addAssignment()">Add Assignment</button>
-      <ul id="assignment-list"></ul>
-    </div>
-  </section>
-
-  <!-- Reminders & Notifications -->
-  <section class="card reminder" id="reminder-section">
-    <h2>Reminders & Notifications</h2>
-    <div class="card-content">
-      <input type="text" id="reminder-text" placeholder="Reminder text" />
-      <input type="datetime-local" id="reminder-time" />
-      <button onclick="addReminder()">Add Reminder</button>
-      <ul id="reminder-list"></ul>
-    </div>
-  </section>
-
-  <!-- Study Timer (Pomodoro) -->
-  <section class="card timer" id="timer-section">
-    <h2>Pomodoro Study Timer</h2>
-    <div class="card-content" style="text-align:center;">
-      <div id="timer-display" style="font-size: 2.8rem; font-weight: 700; margin-bottom: 15px;">25:00</div>
-      <button id="start-btn" onclick="startTimer()">Start</button>
-      <button id="pause-btn" onclick="pauseTimer()" disabled>Pause</button>
-      <button id="reset-btn" onclick="resetTimer()">Reset</button>
-    </div>
-  </section>
-
-</div>
-
-<script>
-  // ====== To-Do List ======
-  const todoInput = document.getElementById('todo-input');
-  const todoList = document.getElementById('todo-list');
-  const prioritySelect = document.getElementById('priority-select');
-
-  function addTask() {
-    const task = todoInput.value.trim();
-    const priority = prioritySelect.value;
-    if (task === '') {
-      alert('Please enter a task.');
-      return;
-    }
-
-    const li = document.createElement('li');
-    li.textContent = `${task} [${priority}]`;
-
-    // Mark completed on click
-    li.addEventListener('click', () => {
-      li.classList.toggle('completed');
+  <script>
+    // Add feature clicks (later expand these)
+    document.querySelectorAll('.feature').forEach(btn => {
+      btn.addEventListener('click', () => {
+        alert('Feature: ' + btn.textContent.trim() + ' clicked!');
+      });
     });
-
-    // Add delete button
-    const delBtn = document.createElement('button');
-    delBtn.textContent = '×';
-    delBtn.title = 'Delete task';
-    delBtn.onclick = (e) => {
-      e.stopPropagation();
-      li.remove();
-    };
-
-    li.appendChild(delBtn);
-    todoList.appendChild(li);
-    todoInput.value = '';
-  }
-
-  // ====== Class Schedule ======
-  const classNameInput = document.getElementById('class-name');
-  const classTimeInput = document.getElementById('class-time');
-  const classList = document.getElementById('class-list');
-
-  function addClass() {
-    const name = classNameInput.value.trim();
-    const time = classTimeInput.value.trim();
-    if (name === '' || time === '') {
-      alert('Please enter both class name and time.');
-      return;
-    }
-    const li = document.createElement('li');
-    li.textContent = `${time} - ${name}`;
-
-    const delBtn = document.createElement('button');
-    delBtn.textContent = '×';
-    delBtn.title = 'Delete class';
-    delBtn.onclick = () => li.remove();
-
-    li.appendChild(delBtn);
-    classList.appendChild(li);
-    classNameInput.value = '';
-    classTimeInput.value = '';
-  }
-
-  // ====== Assignment Tracker ======
-  const assignmentNameInput = document.getElementById('assignment-name');
-  const assignmentDateInput = document.getElementById('assignment-date');
-  const assignmentList = document.getElementById('assignment-list');
-
-  function addAssignment() {
-    const name = assignmentNameInput.value.trim();
-    const date = assignmentDateInput.value;
-    if (name === '' || date === '') {
-      alert('Please enter assignment title and due date.');
-      return;
-    }
-    const li = document.createElement('li');
-    const dueDate = new Date(date);
-    li.textContent = `${name} - Due: ${dueDate.toLocaleDateString()}`;
-
-    const delBtn = document.createElement('button');
-    delBtn.textContent = '×';
-    delBtn.title = 'Delete assignment';
-    delBtn.onclick = () => li.remove();
-
-    li.appendChild(delBtn);
-    assignmentList.appendChild(li);
-    assignmentNameInput.value = '';
-    assignmentDateInput.value = '';
-  }
-
-  // ====== Reminders ======
-  const reminderTextInput = document.getElementById('reminder-text');
-  const reminderTimeInput = document.getElementById('reminder-time');
-  const reminderList = document.getElementById('reminder-list');
-
-  function addReminder() {
-    const text = reminderTextInput.value.trim();
-    const time = reminderTimeInput.value;
-    if (text === '' || time === '') {
-      alert('Please enter reminder text and time.');
-      return;
-    }
-    const li = document.createElement('li');
-    const remindDate = new Date(time);
-    li.textContent = `${text} - At: ${remindDate.toLocaleString()}`;
-
-    const delBtn = document.createElement('button');
-    delBtn.textContent = '×';
-    delBtn.title = 'Delete reminder';
-    delBtn.onclick = () => li.remove();
-
-    li.appendChild(delBtn);
-    reminderList.appendChild(li);
-    reminderTextInput.value = '';
-    reminderTimeInput.value = '';
-  }
-
-  // ====== Pomodoro Timer ======
-  const timerDisplay = document.getElementById('timer-display');
-  const startBtn = document.getElementById('start-btn');
-  const pauseBtn = document.getElementById('pause-btn');
-  const resetBtn = document.getElementById('reset-btn');
-
-  let timerDuration = 25 * 60; // 25 minutes in seconds
-  let timerRemaining = timerDuration;
-  let timerInterval = null;
-
-  function formatTime(seconds) {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-  }
-
-  function updateDisplay() {
-    timerDisplay.textContent = formatTime(timerRemaining);
-  }
-
-  function startTimer() {
-    if (timerInterval) return; // already running
-
-    startBtn.disabled = true;
-    pauseBtn.disabled = false;
-
-    timerInterval = setInterval(() => {
-      timerRemaining--;
-      updateDisplay();
-      if (timerRemaining <= 0) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-        alert('Pomodoro session completed! Take a short break.');
-        startBtn.disabled = false;
-        pauseBtn.disabled = true;
-        timerRemaining = timerDuration;
-        updateDisplay();
-      }
-    }, 1000);
-  }
-
-  function pauseTimer() {
-    if (!timerInterval) return;
-
-    clearInterval(timerInterval);
-    timerInterval = null;
-    startBtn.disabled = false;
-    pauseBtn.disabled = true;
-  }
-
-  function resetTimer() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-    timerRemaining = timerDuration;
-    updateDisplay();
-    startBtn.disabled = false;
-    pauseBtn.disabled = true;
-  }
-
-  updateDisplay();
-</script>
-
+  </script>
 </body>
 </html>
