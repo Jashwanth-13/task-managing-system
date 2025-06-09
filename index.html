@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Student Productivity App</title>
 <style>
-  /* Reset & basics */
+  /* Reset and basics */
   * {
     box-sizing: border-box;
   }
@@ -32,8 +32,6 @@
     font-weight: bold;
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
   }
-
-  /* Pages container */
   .pages {
     flex: 1;
     overflow-y: auto;
@@ -45,17 +43,13 @@
     from {opacity:0; transform: translateY(10px);}
     to {opacity:1; transform: translateY(0);}
   }
-
-  /* Page styles */
   .page {
     display: none;
   }
   .page.active {
     display: block;
   }
-
-  /* Common inputs and buttons */
-  input[type=text], input[type=date], select {
+  input[type=text], input[type=date], input[type=time], select {
     padding: 0.5rem;
     margin-right: 0.5rem;
     border-radius: 4px;
@@ -80,11 +74,11 @@
     cursor: not-allowed;
   }
 
-  /* To-Do List */
-  #todo input, #todo select {
-    width: 200px;
+  /* Lists and items */
+  .item-list {
+    margin-top: 1rem;
   }
-  .todo-item {
+  .item {
     background: #2c2c2c;
     margin: 0.5rem 0;
     padding: 0.6rem 1rem;
@@ -94,24 +88,10 @@
     align-items: center;
     animation: slideIn 0.4s ease forwards;
   }
-  .todo-item span {
+  .item span {
     flex: 1;
-    cursor: pointer;
   }
-  .todo-item span.completed {
-    text-decoration: line-through;
-    opacity: 0.6;
-  }
-  .todo-item.high {
-    border-left: 5px solid #cf6679;
-  }
-  .todo-item.medium {
-    border-left: 5px solid #bb86fc;
-  }
-  .todo-item.low {
-    border-left: 5px solid #03dac6;
-  }
-  .todo-item button.delete-btn {
+  .item button.delete-btn {
     background: transparent;
     color: #cf6679;
     font-weight: bold;
@@ -121,29 +101,25 @@
     font-size: 1rem;
     transition: color 0.3s ease;
   }
-  .todo-item button.delete-btn:hover {
+  .item button.delete-btn:hover {
     color: #ff4455;
+  }
+  .todo-priority-high {
+    border-left: 5px solid #cf6679;
+  }
+  .todo-priority-medium {
+    border-left: 5px solid #bb86fc;
+  }
+  .todo-priority-low {
+    border-left: 5px solid #03dac6;
+  }
+  .completed {
+    text-decoration: line-through;
+    opacity: 0.6;
   }
   @keyframes slideIn {
     from {opacity:0; transform: translateX(-20px);}
     to {opacity:1; transform: translateX(0);}
-  }
-
-  /* Schedule & Deadlines */
-  .item-list {
-    margin-top: 1rem;
-  }
-  .item-list div {
-    background: #2c2c2c;
-    padding: 0.7rem 1rem;
-    margin: 0.4rem 0;
-    border-radius: 6px;
-    animation: slideIn 0.4s ease forwards;
-  }
-
-  /* Reminders */
-  #reminderInput, #reminderTime {
-    width: 180px;
   }
 
   /* Timer */
@@ -160,7 +136,7 @@
     margin-right: 1rem;
   }
 
-  /* Dashboard */
+  /* Progress Dashboard */
   #progressContainer {
     margin-top: 1rem;
     background: #2c2c2c;
@@ -201,7 +177,7 @@
     margin-bottom: 0.8rem;
   }
 
-  /* Bottom Nav */
+  /* Navigation */
   nav {
     background: #2c2c2c;
     display: flex;
@@ -296,4 +272,420 @@
         <button id="startTimerBtn">Start</button>
         <button id="pauseTimerBtn" disabled>Pause</button>
         <button id="resetTimerBtn">Reset</button>
-     
+      </div>
+      <small>Pomodoro Timer: 25 minutes study, 5 minutes break</small>
+    </section>
+
+    <!-- Progress Tracker / Dashboard -->
+    <section id="dashboard" class="page">
+      <h2>Progress Tracker / Dashboard</h2>
+      <div id="progressContainer">
+        <p>Tasks Completed: <span id="tasksCompleted">0</span> / <span id="tasksTotal">0</span></p>
+        <progress id="progressBar" value="0" max="100"></progress>
+      </div>
+    </section>
+
+    <!-- Motivational Videos -->
+    <section id="videos" class="page">
+      <h2>Motivational Videos</h2>
+      <div id="videosList" aria-live="polite">
+        <iframe src="https://www.youtube.com/embed/ZXsQAXx_ao0" frameborder="0" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/wnHW6o8WMas" frameborder="0" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/hY7m5jjJ9mM" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <!-- Study Tips & Tricks -->
+    <section id="tips" class="page">
+      <h2>Study Tips & Tricks</h2>
+      <ul id="tipsList">
+        <li>Break your study sessions into focused intervals (Pomodoro technique).</li>
+        <li>Remove distractions by turning off notifications.</li>
+        <li>Use active recall and spaced repetition for better retention.</li>
+        <li>Stay hydrated and take short breaks regularly.</li>
+        <li>Set clear, achievable goals for each study session.</li>
+        <li>Mix up subjects to keep your brain engaged.</li>
+        <li>Review your notes regularly rather than cramming.</li>
+      </ul>
+    </section>
+  </div>
+
+  <nav aria-label="Main Navigation">
+    <button class="nav-btn active" data-target="todo" aria-current="page">To-Do List</button>
+    <button class="nav-btn" data-target="schedule">Schedule</button>
+    <button class="nav-btn" data-target="deadlines">Deadlines</button>
+    <button class="nav-btn" data-target="reminders">Reminders</button>
+    <button class="nav-btn" data-target="timer">Timer</button>
+    <button class="nav-btn" data-target="dashboard">Dashboard</button>
+    <button class="nav-btn" data-target="videos">Videos</button>
+    <button class="nav-btn" data-target="tips">Tips</button>
+  </nav>
+</div>
+
+<script>
+  // Navigation logic
+  const navButtons = document.querySelectorAll('nav .nav-btn');
+  const pages = document.querySelectorAll('.page');
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Deactivate all nav buttons
+      navButtons.forEach(b => {
+        b.classList.remove('active');
+        b.removeAttribute('aria-current');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-current', 'page');
+
+      // Hide all pages and show target page
+      const target = btn.getAttribute('data-target');
+      pages.forEach(page => {
+        if (page.id === target) {
+          page.classList.add('active');
+        } else {
+          page.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  // --- To-Do List Feature ---
+  const taskInput = document.getElementById('taskInput');
+  const prioritySelect = document.getElementById('priority');
+  const addTaskBtn = document.getElementById('addTaskBtn');
+  const taskList = document.getElementById('taskList');
+
+  // Load tasks from localStorage
+  let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+
+  function saveTasks() {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    updateDashboard();
+  }
+
+  function renderTasks() {
+    taskList.innerHTML = '';
+    tasks.forEach((task, i) => {
+      const div = document.createElement('div');
+      div.className = 'item todo-priority-' + task.priority + (task.completed ? ' completed' : '');
+      div.setAttribute('data-index', i);
+
+      const span = document.createElement('span');
+      span.textContent = task.text + (task.completed ? ' ✔️' : '');
+      span.style.cursor = 'pointer';
+      span.title = 'Click to toggle complete';
+      span.addEventListener('click', () => {
+        tasks[i].completed = !tasks[i].completed;
+        saveTasks();
+        renderTasks();
+      });
+
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '×';
+      delBtn.className = 'delete-btn';
+      delBtn.title = 'Delete task';
+      delBtn.addEventListener('click', () => {
+        tasks.splice(i, 1);
+        saveTasks();
+        renderTasks();
+      });
+
+      div.appendChild(span);
+      div.appendChild(delBtn);
+      taskList.appendChild(div);
+    });
+  }
+
+  addTaskBtn.addEventListener('click', () => {
+    const text = taskInput.value.trim();
+    if (!text) return alert('Please enter a task.');
+    const priority = prioritySelect.value;
+
+    tasks.push({ text, priority, completed: false });
+    saveTasks();
+    renderTasks();
+    taskInput.value = '';
+    taskInput.focus();
+  });
+
+  renderTasks();
+
+  // --- Schedule Feature ---
+  const classNameInput = document.getElementById('className');
+  const classTimeInput = document.getElementById('classTime');
+  const addClassBtn = document.getElementById('addClassBtn');
+  const scheduleList = document.getElementById('scheduleList');
+
+  let schedule = JSON.parse(localStorage.getItem('schedule') || '[]');
+
+  function saveSchedule() {
+    localStorage.setItem('schedule', JSON.stringify(schedule));
+  }
+
+  function renderSchedule() {
+    scheduleList.innerHTML = '';
+    schedule.forEach((cls, i) => {
+      const div = document.createElement('div');
+      div.className = 'item';
+
+      const span = document.createElement('span');
+      span.textContent = `${cls.name} — ${cls.time}`;
+
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '×';
+      delBtn.className = 'delete-btn';
+      delBtn.title = 'Delete class';
+      delBtn.addEventListener('click', () => {
+        schedule.splice(i, 1);
+        saveSchedule();
+        renderSchedule();
+      });
+
+      div.appendChild(span);
+      div.appendChild(delBtn);
+      scheduleList.appendChild(div);
+    });
+  }
+
+  addClassBtn.addEventListener('click', () => {
+    const name = classNameInput.value.trim();
+    const time = classTimeInput.value.trim();
+    if (!name || !time) return alert('Please fill class name and time.');
+
+    schedule.push({ name, time });
+    saveSchedule();
+    renderSchedule();
+
+    classNameInput.value = '';
+    classTimeInput.value = '';
+    classNameInput.focus();
+  });
+
+  renderSchedule();
+
+  // --- Assignment / Deadline Tracker ---
+  const assignmentNameInput = document.getElementById('assignmentName');
+  const assignmentDueInput = document.getElementById('assignmentDue');
+  const addAssignmentBtn = document.getElementById('addAssignmentBtn');
+  const assignmentList = document.getElementById('assignmentList');
+
+  let assignments = JSON.parse(localStorage.getItem('assignments') || '[]');
+
+  function saveAssignments() {
+    localStorage.setItem('assignments', JSON.stringify(assignments));
+  }
+
+  function renderAssignments() {
+    assignmentList.innerHTML = '';
+    assignments.forEach((a, i) => {
+      const div = document.createElement('div');
+      div.className = 'item';
+
+      const dueDate = new Date(a.due);
+      const now = new Date();
+      const isDueSoon = (dueDate - now) / (1000 * 60 * 60 * 24) <= 3; // due in 3 days or less
+
+      const span = document.createElement('span');
+      span.textContent = `${a.title} — Due: ${a.due}`;
+      if (isDueSoon) span.style.color = '#cf6679';
+
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '×';
+      delBtn.className = 'delete-btn';
+      delBtn.title = 'Delete assignment';
+      delBtn.addEventListener('click', () => {
+        assignments.splice(i, 1);
+        saveAssignments();
+        renderAssignments();
+      });
+
+      div.appendChild(span);
+      div.appendChild(delBtn);
+      assignmentList.appendChild(div);
+    });
+  }
+
+  addAssignmentBtn.addEventListener('click', () => {
+    const title = assignmentNameInput.value.trim();
+    const due = assignmentDueInput.value;
+    if (!title || !due) return alert('Please fill assignment title and due date.');
+
+    assignments.push({ title, due });
+    saveAssignments();
+    renderAssignments();
+
+    assignmentNameInput.value = '';
+    assignmentDueInput.value = '';
+    assignmentNameInput.focus();
+  });
+
+  renderAssignments();
+
+  // --- Reminders & Notifications ---
+  const reminderInput = document.getElementById('reminderInput');
+  const reminderTimeInput = document.getElementById('reminderTime');
+  const addReminderBtn = document.getElementById('addReminderBtn');
+  const reminderList = document.getElementById('reminderList');
+
+  let reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
+
+  function saveReminders() {
+    localStorage.setItem('reminders', JSON.stringify(reminders));
+  }
+
+  function renderReminders() {
+    reminderList.innerHTML = '';
+    reminders.forEach((r, i) => {
+      const div = document.createElement('div');
+      div.className = 'item';
+
+      const span = document.createElement('span');
+      span.textContent = `${r.text} — At: ${r.time}`;
+
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '×';
+      delBtn.className = 'delete-btn';
+      delBtn.title = 'Delete reminder';
+      delBtn.addEventListener('click', () => {
+        reminders.splice(i, 1);
+        saveReminders();
+        renderReminders();
+      });
+
+      div.appendChild(span);
+      div.appendChild(delBtn);
+      reminderList.appendChild(div);
+    });
+  }
+
+  addReminderBtn.addEventListener('click', () => {
+    const text = reminderInput.value.trim();
+    const time = reminderTimeInput.value;
+    if (!text || !time) return alert('Please fill reminder text and time.');
+
+    reminders.push({ text, time });
+    saveReminders();
+    renderReminders();
+
+    reminderInput.value = '';
+    reminderTimeInput.value = '';
+    reminderInput.focus();
+  });
+
+  renderReminders();
+
+  // Notifications check every minute
+  if ("Notification" in window) {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }
+
+  function checkReminders() {
+    if (Notification.permission !== "granted") return;
+
+    const now = new Date();
+    reminders.forEach((r, i) => {
+      const [hours, minutes] = r.time.split(':').map(Number);
+      if (now.getHours() === hours && now.getMinutes() === minutes) {
+        new Notification("Reminder", { body: r.text });
+        // Remove reminder after notification
+        reminders.splice(i, 1);
+        saveReminders();
+        renderReminders();
+      }
+    });
+  }
+  setInterval(checkReminders, 60 * 1000);
+
+  // --- Pomodoro Timer ---
+  const timerDisplay = document.getElementById('timerDisplay');
+  const startTimerBtn = document.getElementById('startTimerBtn');
+  const pauseTimerBtn = document.getElementById('pauseTimerBtn');
+  const resetTimerBtn = document.getElementById('resetTimerBtn');
+
+  let pomodoroDuration = 25 * 60; // 25 mins in seconds
+  let breakDuration = 5 * 60; // 5 mins in seconds
+  let timer = pomodoroDuration;
+  let timerRunning = false;
+  let onBreak = false;
+  let interval;
+
+  function updateTimerDisplay() {
+    const m = Math.floor(timer / 60).toString().padStart(2, '0');
+    const s = (timer % 60).toString().padStart(2, '0');
+    timerDisplay.textContent = `${m}:${s}`;
+    timerDisplay.style.color = onBreak ? '#03dac6' : '#bb86fc';
+  }
+
+  function timerTick() {
+    if (timer > 0) {
+      timer--;
+      updateTimerDisplay();
+    } else {
+      // Play sound
+      const beep = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
+      beep.play();
+
+      if (!onBreak) {
+        onBreak = true;
+        timer = breakDuration;
+        alert('Time for a short break!');
+      } else {
+        onBreak = false;
+        timer = pomodoroDuration;
+        alert('Break is over! Back to work.');
+      }
+      updateTimerDisplay();
+    }
+  }
+
+  startTimerBtn.addEventListener('click', () => {
+    if (!timerRunning) {
+      interval = setInterval(timerTick, 1000);
+      timerRunning = true;
+      startTimerBtn.disabled = true;
+      pauseTimerBtn.disabled = false;
+    }
+  });
+
+  pauseTimerBtn.addEventListener('click', () => {
+    if (timerRunning) {
+      clearInterval(interval);
+      timerRunning = false;
+      startTimerBtn.disabled = false;
+      pauseTimerBtn.disabled = true;
+    }
+  });
+
+  resetTimerBtn.addEventListener('click', () => {
+    clearInterval(interval);
+    timerRunning = false;
+    timer = pomodoroDuration;
+    onBreak = false;
+    updateTimerDisplay();
+    startTimerBtn.disabled = false;
+    pauseTimerBtn.disabled = true;
+  });
+
+  updateTimerDisplay();
+
+  // --- Progress Dashboard ---
+  const tasksCompletedSpan = document.getElementById('tasksCompleted');
+  const tasksTotalSpan = document.getElementById('tasksTotal');
+  const progressBar = document.getElementById('progressBar');
+
+  function updateDashboard() {
+    const total = tasks.length;
+    const completed = tasks.filter(t => t.completed).length;
+
+    tasksCompletedSpan.textContent = completed;
+    tasksTotalSpan.textContent = total;
+    progressBar.max = total || 1; // avoid zero max
+    progressBar.value = completed;
+  }
+
+  updateDashboard();
+</script>
+</body>
+</html>
