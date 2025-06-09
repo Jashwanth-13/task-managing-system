@@ -3,689 +3,272 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Student Productivity App</title>
+<title>Study Buddy - Productivity App</title>
 <style>
-  /* Reset and basics */
-  * {
-    box-sizing: border-box;
-  }
+  /* Background and body */
   body {
-    margin: 0; padding: 0;
+    margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #121212;
-    color: #eee;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
+    background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1470&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
-  #app {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  body::before {
+    content: '';
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.6);
+    z-index: -1;
   }
-  header {
-    background: #6200ea;
-    padding: 1rem;
-    font-size: 1.6rem;
+
+  h1 {
     text-align: center;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    margin: 30px 0 10px 0;
+    font-weight: 700;
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px rgba(255 255 255 / 0.8);
   }
-  .pages {
-    flex: 1;
+  p.subtitle {
+    text-align: center;
+    font-weight: 300;
+    margin-bottom: 40px;
+    font-size: 1.2rem;
+    color: #ddd;
+  }
+
+  /* Container to hold all feature cards */
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    padding: 0 20px 50px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Common card style */
+  .card {
+    background: rgba(255 255 255 / 0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    width: 320px;
+    padding: 20px 25px;
+    color: #fff;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.7s ease forwards;
+    opacity: 0;
+  }
+  .card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.7);
+  }
+
+  /* Card distinct colors by feature */
+  .todo { border-top: 5px solid #FF6B6B; }
+  .schedule { border-top: 5px solid #4ECDC4; }
+  .assignment { border-top: 5px solid #FFD93D; color: #333; background: rgba(255 217 61 / 0.15);}
+  .reminder { border-top: 5px solid #556270; }
+  .timer { border-top: 5px solid #C7F464; color: #333; background: rgba(199 244 100 / 0.15);}
+  .progress { border-top: 5px solid #FFA500; }
+  .videos { border-top: 5px solid #6A0572; }
+  .tips { border-top: 5px solid #3D3B8E; }
+
+  /* Card headings */
+  .card h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-shadow: 0 0 4px rgba(0,0,0,0.6);
+  }
+
+  /* Scrollable content in cards if needed */
+  .card-content {
+    max-height: 260px;
     overflow-y: auto;
-    background: #1e1e1e;
-    padding: 1rem;
-    animation: fadeIn 0.6s ease;
   }
-  @keyframes fadeIn {
-    from {opacity:0; transform: translateY(10px);}
-    to {opacity:1; transform: translateY(0);}
+
+  /* Fade in animation for cards */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  .page {
-    display: none;
-  }
-  .page.active {
-    display: block;
-  }
-  input[type=text], input[type=date], input[type=time], select {
-    padding: 0.5rem;
-    margin-right: 0.5rem;
-    border-radius: 4px;
-    border: none;
-    font-size: 1rem;
-  }
+
+  /* Buttons */
   button {
-    background: #6200ea;
-    border: none;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
     cursor: pointer;
+    background-color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 25px;
     font-weight: 600;
+    font-size: 0.9rem;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     transition: background-color 0.3s ease;
   }
   button:hover {
-    background: #3700b3;
-  }
-  button:disabled {
-    background: #888;
-    cursor: not-allowed;
+    background-color: #f2f2f2;
   }
 
-  /* Lists and items */
-  .item-list {
-    margin-top: 1rem;
+  /* Inputs and selects */
+  input[type=text], input[type=date], select {
+    width: 100%;
+    padding: 8px 10px;
+    margin: 8px 0 12px 0;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    box-sizing: border-box;
   }
-  .item {
-    background: #2c2c2c;
-    margin: 0.5rem 0;
-    padding: 0.6rem 1rem;
-    border-radius: 6px;
+
+  /* To-do list items */
+  ul.todo-list {
+    list-style: none;
+    padding-left: 0;
+    max-height: 140px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+  }
+  ul.todo-list li {
+    background: rgba(255 255 255 / 0.15);
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    animation: slideIn 0.4s ease forwards;
-  }
-  .item span {
-    flex: 1;
-  }
-  .item button.delete-btn {
-    background: transparent;
-    color: #cf6679;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    margin-left: 1rem;
     font-size: 1rem;
-    transition: color 0.3s ease;
   }
-  .item button.delete-btn:hover {
-    color: #ff4455;
-  }
-  .todo-priority-high {
-    border-left: 5px solid #cf6679;
-  }
-  .todo-priority-medium {
-    border-left: 5px solid #bb86fc;
-  }
-  .todo-priority-low {
-    border-left: 5px solid #03dac6;
-  }
-  .completed {
+  ul.todo-list li.completed {
     text-decoration: line-through;
     opacity: 0.6;
   }
-  @keyframes slideIn {
-    from {opacity:0; transform: translateX(-20px);}
-    to {opacity:1; transform: translateX(0);}
-  }
-
-  /* Timer */
-  #timerDisplay {
-    font-size: 3rem;
-    text-align: center;
-    margin-bottom: 1rem;
-    font-weight: bold;
-    user-select: none;
-    color: #bb86fc;
-    text-shadow: 0 0 8px #bb86fc;
-  }
-  #timerButtons button {
-    margin-right: 1rem;
-  }
-
-  /* Progress Dashboard */
-  #progressContainer {
-    margin-top: 1rem;
-    background: #2c2c2c;
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: center;
-  }
-  progress {
-    width: 100%;
-    height: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-  progress::-webkit-progress-bar {
-    background-color: #444;
-  }
-  progress::-webkit-progress-value {
-    background-color: #bb86fc;
-  }
-
-  /* Videos */
-  #videosList iframe {
-    width: 100%;
-    height: 180px;
-    margin: 0.5rem 0;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(187,134,252,0.5);
-  }
-
-  /* Tips */
-  #tipsList {
-    margin-top: 1rem;
-    line-height: 1.6;
-  }
-  #tipsList li {
-    margin-bottom: 0.8rem;
-  }
-
-  /* Navigation */
-  nav {
-    background: #2c2c2c;
-    display: flex;
-    justify-content: space-around;
-    padding: 0.5rem 0;
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.6);
-  }
-  nav button {
+  ul.todo-list li button {
     background: transparent;
+    color: #fff;
     border: none;
-    color: #ccc;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    padding: 0.5rem 0.7rem;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
-  }
-  nav button.active, nav button:hover {
-    background: #bb86fc;
-    color: #121212;
+    font-weight: 700;
+    font-size: 1.2rem;
   }
 
-  /* Scrollbar for pages */
-  .pages::-webkit-scrollbar {
-    width: 8px;
+  /* Scrollbar style for lists */
+  ::-webkit-scrollbar {
+    width: 6px;
   }
-  .pages::-webkit-scrollbar-thumb {
-    background: #6200ea;
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
     border-radius: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Responsive */
+  @media (max-width: 1000px) {
+    .container {
+      justify-content: center;
+    }
+  }
+  @media (max-width: 680px) {
+    .card {
+      width: 90%;
+    }
   }
 </style>
 </head>
 <body>
-<div id="app">
-  <header>📚 Student Productivity App</header>
 
-  <div class="pages">
-    <!-- To-Do List -->
-    <section id="todo" class="page active">
-      <h2>Daily To-Do List</h2>
-      <div>
-        <input type="text" id="taskInput" placeholder="Add new task..." />
-        <select id="priority">
-          <option value="high">High Priority</option>
-          <option value="medium" selected>Medium Priority</option>
-          <option value="low">Low Priority</option>
-        </select>
-        <button id="addTaskBtn">Add Task</button>
-      </div>
-      <div id="taskList" class="item-list" aria-live="polite"></div>
-    </section>
-
-    <!-- Class Schedule Organizer -->
-    <section id="schedule" class="page">
-      <h2>Class Schedule Organizer</h2>
-      <div>
-        <input type="text" id="className" placeholder="Class Name" />
-        <input type="text" id="classTime" placeholder="Time (e.g. Mon 9-10am)" />
-        <button id="addClassBtn">Add Class</button>
-      </div>
-      <div id="scheduleList" class="item-list" aria-live="polite"></div>
-    </section>
-
-    <!-- Assignment / Deadline Tracker -->
-    <section id="deadlines" class="page">
-      <h2>Assignment / Deadline Tracker</h2>
-      <div>
-        <input type="text" id="assignmentName" placeholder="Assignment Title" />
-        <input type="date" id="assignmentDue" />
-        <button id="addAssignmentBtn">Add Assignment</button>
-      </div>
-      <div id="assignmentList" class="item-list" aria-live="polite"></div>
-    </section>
-
-    <!-- Reminders & Notifications -->
-    <section id="reminders" class="page">
-      <h2>Reminders & Notifications</h2>
-      <div>
-        <input type="text" id="reminderInput" placeholder="Reminder text" />
-        <input type="time" id="reminderTime" />
-        <button id="addReminderBtn">Set Reminder</button>
-      </div>
-      <div id="reminderList" class="item-list" aria-live="polite"></div>
-    </section>
-
-    <!-- Study Timer (Pomodoro) -->
-    <section id="timer" class="page">
-      <h2>Study Timer (Pomodoro)</h2>
-      <div id="timerDisplay">25:00</div>
-      <div id="timerButtons">
-        <button id="startTimerBtn">Start</button>
-        <button id="pauseTimerBtn" disabled>Pause</button>
-        <button id="resetTimerBtn">Reset</button>
-      </div>
-      <small>Pomodoro Timer: 25 minutes study, 5 minutes break</small>
-    </section>
-
-    <!-- Progress Tracker / Dashboard -->
-    <section id="dashboard" class="page">
-      <h2>Progress Tracker / Dashboard</h2>
-      <div id="progressContainer">
-        <p>Tasks Completed: <span id="tasksCompleted">0</span> / <span id="tasksTotal">0</span></p>
-        <progress id="progressBar" value="0" max="100"></progress>
-      </div>
-    </section>
-
-    <!-- Motivational Videos -->
-    <section id="videos" class="page">
-      <h2>Motivational Videos</h2>
-      <div id="videosList" aria-live="polite">
-        <iframe src="https://www.youtube.com/embed/ZXsQAXx_ao0" frameborder="0" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/wnHW6o8WMas" frameborder="0" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/hY7m5jjJ9mM" frameborder="0" allowfullscreen></iframe>
-      </div>
-    </section>
-
-    <!-- Study Tips & Tricks -->
-    <section id="tips" class="page">
-      <h2>Study Tips & Tricks</h2>
-      <ul id="tipsList">
-        <li>Break your study sessions into focused intervals (Pomodoro technique).</li>
-        <li>Remove distractions by turning off notifications.</li>
-        <li>Use active recall and spaced repetition for better retention.</li>
-        <li>Stay hydrated and take short breaks regularly.</li>
-        <li>Set clear, achievable goals for each study session.</li>
-        <li>Mix up subjects to keep your brain engaged.</li>
-        <li>Review your notes regularly rather than cramming.</li>
-      </ul>
-    </section>
-  </div>
-
-  <nav aria-label="Main Navigation">
-    <button class="nav-btn active" data-target="todo" aria-current="page">To-Do List</button>
-    <button class="nav-btn" data-target="schedule">Schedule</button>
-    <button class="nav-btn" data-target="deadlines">Deadlines</button>
-    <button class="nav-btn" data-target="reminders">Reminders</button>
-    <button class="nav-btn" data-target="timer">Timer</button>
-    <button class="nav-btn" data-target="dashboard">Dashboard</button>
-    <button class="nav-btn" data-target="videos">Videos</button>
-    <button class="nav-btn" data-target="tips">Tips</button>
-  </nav>
-</div>
-
-<script>
-  // Navigation logic
-  const navButtons = document.querySelectorAll('nav .nav-btn');
-  const pages = document.querySelectorAll('.page');
-
-  navButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Deactivate all nav buttons
-      navButtons.forEach(b => {
-        b.classList.remove('active');
-        b.removeAttribute('aria-current');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-current', 'page');
-
-      // Hide all pages and show target page
-      const target = btn.getAttribute('data-target');
-      pages.forEach(page => {
-        if (page.id === target) {
-          page.classList.add('active');
-        } else {
-          page.classList.remove('active');
-        }
-      });
-    });
-  });
-
-  // --- To-Do List Feature ---
-  const taskInput = document.getElementById('taskInput');
-  const prioritySelect = document.getElementById('priority');
-  const addTaskBtn = document.getElementById('addTaskBtn');
-  const taskList = document.getElementById('taskList');
-
-  // Load tasks from localStorage
-  let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-
-  function saveTasks() {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    updateDashboard();
-  }
-
-  function renderTasks() {
-    taskList.innerHTML = '';
-    tasks.forEach((task, i) => {
-      const div = document.createElement('div');
-      div.className = 'item todo-priority-' + task.priority + (task.completed ? ' completed' : '');
-      div.setAttribute('data-index', i);
-
-      const span = document.createElement('span');
-      span.textContent = task.text + (task.completed ? ' ✔️' : '');
-      span.style.cursor = 'pointer';
-      span.title = 'Click to toggle complete';
-      span.addEventListener('click', () => {
-        tasks[i].completed = !tasks[i].completed;
-        saveTasks();
-        renderTasks();
-      });
-
-      const delBtn = document.createElement('button');
-      delBtn.textContent = '×';
-      delBtn.className = 'delete-btn';
-      delBtn.title = 'Delete task';
-      delBtn.addEventListener('click', () => {
-        tasks.splice(i, 1);
-        saveTasks();
-        renderTasks();
-      });
-
-      div.appendChild(span);
-      div.appendChild(delBtn);
-      taskList.appendChild(div);
-    });
-  }
-
-  addTaskBtn.addEventListener('click', () => {
-    const text = taskInput.value.trim();
-    if (!text) return alert('Please enter a task.');
-    const priority = prioritySelect.value;
-
-    tasks.push({ text, priority, completed: false });
-    saveTasks();
-    renderTasks();
-    taskInput.value = '';
-    taskInput.focus();
-  });
-
-  renderTasks();
-
-  // --- Schedule Feature ---
-  const classNameInput = document.getElementById('className');
-  const classTimeInput = document.getElementById('classTime');
-  const addClassBtn = document.getElementById('addClassBtn');
-  const scheduleList = document.getElementById('scheduleList');
-
-  let schedule = JSON.parse(localStorage.getItem('schedule') || '[]');
-
-  function saveSchedule() {
-    localStorage.setItem('schedule', JSON.stringify(schedule));
-  }
-
-  function renderSchedule() {
-    scheduleList.innerHTML = '';
-    schedule.forEach((cls, i) => {
-      const div = document.createElement('div');
-      div.className = 'item';
-
-      const span = document.createElement('span');
-      span.textContent = `${cls.name} — ${cls.time}`;
-
-      const delBtn = document.createElement('button');
-      delBtn.textContent = '×';
-      delBtn.className = 'delete-btn';
-      delBtn.title = 'Delete class';
-      delBtn.addEventListener('click', () => {
-        schedule.splice(i, 1);
-        saveSchedule();
-        renderSchedule();
-      });
-
-      div.appendChild(span);
-      div.appendChild(delBtn);
-      scheduleList.appendChild(div);
-    });
-  }
-
-  addClassBtn.addEventListener('click', () => {
-    const name = classNameInput.value.trim();
-    const time = classTimeInput.value.trim();
-    if (!name || !time) return alert('Please fill class name and time.');
-
-    schedule.push({ name, time });
-    saveSchedule();
-    renderSchedule();
-
-    classNameInput.value = '';
-    classTimeInput.value = '';
-    classNameInput.focus();
-  });
-
-  renderSchedule();
-
-  // --- Assignment / Deadline Tracker ---
-  const assignmentNameInput = document.getElementById('assignmentName');
-  const assignmentDueInput = document.getElementById('assignmentDue');
-  const addAssignmentBtn = document.getElementById('addAssignmentBtn');
-  const assignmentList = document.getElementById('assignmentList');
-
-  let assignments = JSON.parse(localStorage.getItem('assignments') || '[]');
-
-  function saveAssignments() {
-    localStorage.setItem('assignments', JSON.stringify(assignments));
-  }
-
-  function renderAssignments() {
-    assignmentList.innerHTML = '';
-    assignments.forEach((a, i) => {
-      const div = document.createElement('div');
-      div.className = 'item';
-
-      const dueDate = new Date(a.due);
-      const now = new Date();
-      const isDueSoon = (dueDate - now) / (1000 * 60 * 60 * 24) <= 3; // due in 3 days or less
-
-      const span = document.createElement('span');
-      span.textContent = `${a.title} — Due: ${a.due}`;
-      if (isDueSoon) span.style.color = '#cf6679';
-
-      const delBtn = document.createElement('button');
-      delBtn.textContent = '×';
-      delBtn.className = 'delete-btn';
-      delBtn.title = 'Delete assignment';
-      delBtn.addEventListener('click', () => {
-        assignments.splice(i, 1);
-        saveAssignments();
-        renderAssignments();
-      });
-
-      div.appendChild(span);
-      div.appendChild(delBtn);
-      assignmentList.appendChild(div);
-    });
-  }
-
-  addAssignmentBtn.addEventListener('click', () => {
-    const title = assignmentNameInput.value.trim();
-    const due = assignmentDueInput.value;
-    if (!title || !due) return alert('Please fill assignment title and due date.');
-
-    assignments.push({ title, due });
-    saveAssignments();
-    renderAssignments();
-
-    assignmentNameInput.value = '';
-    assignmentDueInput.value = '';
-    assignmentNameInput.focus();
-  });
-
-  renderAssignments();
-
-  // --- Reminders & Notifications ---
-  const reminderInput = document.getElementById('reminderInput');
-  const reminderTimeInput = document.getElementById('reminderTime');
-  const addReminderBtn = document.getElementById('addReminderBtn');
-  const reminderList = document.getElementById('reminderList');
-
-  let reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
-
-  function saveReminders() {
-    localStorage.setItem('reminders', JSON.stringify(reminders));
-  }
-
-  function renderReminders() {
-    reminderList.innerHTML = '';
-    reminders.forEach((r, i) => {
-      const div = document.createElement('div');
-      div.className = 'item';
-
-      const span = document.createElement('span');
-      span.textContent = `${r.text} — At: ${r.time}`;
-
-      const delBtn = document.createElement('button');
-      delBtn.textContent = '×';
-      delBtn.className = 'delete-btn';
-      delBtn.title = 'Delete reminder';
-      delBtn.addEventListener('click', () => {
-        reminders.splice(i, 1);
-        saveReminders();
-        renderReminders();
-      });
-
-      div.appendChild(span);
-      div.appendChild(delBtn);
-      reminderList.appendChild(div);
-    });
-  }
-
-  addReminderBtn.addEventListener('click', () => {
-    const text = reminderInput.value.trim();
-    const time = reminderTimeInput.value;
-    if (!text || !time) return alert('Please fill reminder text and time.');
-
-    reminders.push({ text, time });
-    saveReminders();
-    renderReminders();
-
-    reminderInput.value = '';
-    reminderTimeInput.value = '';
-    reminderInput.focus();
-  });
-
-  renderReminders();
-
-  // Notifications check every minute
-  if ("Notification" in window) {
-    if (Notification.permission !== "granted") {
-      Notification.requestPermission();
-    }
-  }
-
-  function checkReminders() {
-    if (Notification.permission !== "granted") return;
-
-    const now = new Date();
-    reminders.forEach((r, i) => {
-      const [hours, minutes] = r.time.split(':').map(Number);
-      if (now.getHours() === hours && now.getMinutes() === minutes) {
-        new Notification("Reminder", { body: r.text });
-        // Remove reminder after notification
-        reminders.splice(i, 1);
-        saveReminders();
-        renderReminders();
-      }
-    });
-  }
-  setInterval(checkReminders, 60 * 1000);
-
-  // --- Pomodoro Timer ---
-  const timerDisplay = document.getElementById('timerDisplay');
-  const startTimerBtn = document.getElementById('startTimerBtn');
-  const pauseTimerBtn = document.getElementById('pauseTimerBtn');
-  const resetTimerBtn = document.getElementById('resetTimerBtn');
-
-  let pomodoroDuration = 25 * 60; // 25 mins in seconds
-  let breakDuration = 5 * 60; // 5 mins in seconds
-  let timer = pomodoroDuration;
-  let timerRunning = false;
-  let onBreak = false;
-  let interval;
-
-  function updateTimerDisplay() {
-    const m = Math.floor(timer / 60).toString().padStart(2, '0');
-    const s = (timer % 60).toString().padStart(2, '0');
-    timerDisplay.textContent = `${m}:${s}`;
-    timerDisplay.style.color = onBreak ? '#03dac6' : '#bb86fc';
-  }
-
-  function timerTick() {
-    if (timer > 0) {
-      timer--;
-      updateTimerDisplay();
-    } else {
-      // Play sound
-      const beep = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
-      beep.play();
-
-      if (!onBreak) {
-        onBreak = true;
-        timer = breakDuration;
-        alert('Time for a short break!');
-      } else {
-        onBreak = false;
-        timer = pomodoroDuration;
-        alert('Break is over! Back to work.');
-      }
-      updateTimerDisplay();
-    }
-  }
-
-  startTimerBtn.addEventListener('click', () => {
-    if (!timerRunning) {
-      interval = setInterval(timerTick, 1000);
-      timerRunning = true;
-      startTimerBtn.disabled = true;
-      pauseTimerBtn.disabled = false;
-    }
-  });
-
-  pauseTimerBtn.addEventListener('click', () => {
-    if (timerRunning) {
-      clearInterval(interval);
-      timerRunning = false;
-      startTimerBtn.disabled = false;
-      pauseTimerBtn.disabled = true;
-    }
-  });
-
-  resetTimerBtn.addEventListener('click', () => {
-    clearInterval(interval);
-    timerRunning = false;
-    timer = pomodoroDuration;
-    onBreak = false;
-    updateTimerDisplay();
-    startTimerBtn.disabled = false;
-    pauseTimerBtn.disabled = true;
-  });
-
-  updateTimerDisplay();
-
-  // --- Progress Dashboard ---
-  const tasksCompletedSpan = document.getElementById('tasksCompleted');
-  const tasksTotalSpan = document.getElementById('tasksTotal');
-  const progressBar = document.getElementById('progressBar');
-
-  function updateDashboard() {
-    const total = tasks.length;
-    const completed = tasks.filter(t => t.completed).length;
-
-    tasksCompletedSpan.textContent = completed;
-    tasksTotalSpan.textContent = total;
-    progressBar.max = total || 1; // avoid zero max
-    progressBar.value = completed;
-  }
-
-  updateDashboard();
-</script>
-</body>
-</html>
+<h1>Study Buddy - Your Productivity App</h1>
+<p class="subtitle">Manage your study tasks, schedule, and motivation all in one place!</p>
+
+<div class="container">
+
+  <!-- Daily To-Do List with Priorities -->
+  <section class="card todo" id="todo-section">
+    <h2>Daily To-Do List</h2>
+    <div class="card-content">
+      <input type="text" id="todo-input" placeholder="Add new task..." />
+      <select id="priority-select">
+        <option value="High">🔴 High Priority</option>
+        <option value="Medium" selected>🟠 Medium Priority</option>
+        <option value="Low">🟢 Low Priority</option>
+      </select>
+      <button onclick="addTask()">Add Task</button>
+      <ul class="todo-list" id="todo-list"></ul>
+    </div>
+  </section>
+
+  <!-- Class Schedule Organizer -->
+  <section class="card schedule" id="schedule-section">
+    <h2>Class Schedule Organizer</h2>
+    <div class="card-content">
+      <input type="text" id="class-name" placeholder="Class name" />
+      <input type="text" id="class-time" placeholder="Time (e.g. 10:00 AM)" />
+      <button onclick="addClass()">Add Class</button>
+      <ul id="class-list"></ul>
+    </div>
+  </section>
+
+  <!-- Assignment/Deadline Tracker -->
+  <section class="card assignment" id="assignment-section">
+    <h2>Assignment/Deadline Tracker</h2>
+    <div class="card-content">
+      <input type="text" id="assignment-name" placeholder="Assignment title" />
+      <input type="date" id="assignment-date" />
+      <button onclick="addAssignment()">Add Assignment</button>
+      <ul id="assignment-list"></ul>
+    </div>
+  </section>
+
+  <!-- Reminders & Notifications -->
+  <section class="card reminder" id="reminder-section">
+    <h2>Reminders & Notifications</h2>
+    <div class="card-content">
+      <input type="text" id="reminder-text" placeholder="Reminder text" />
+      <input type="datetime-local" id="reminder-time" />
+      <button onclick="addReminder()">Add Reminder</button>
+      <ul id="reminder-list"></ul>
+    </div>
+  </section>
+
+  <!-- Study Timer (Pomodoro) -->
+  <section class="card timer" id="timer-section">
+    <h2>Pomodoro Study Timer</h2>
+    <div class="card-content" style="text-align:center;">
+      <div id="timer-display" style="font-size: 2.8rem; font-weight: 700;">25:00</div>
+      <button onclick="startTimer()">Start</button>
+      <button onclick="pauseTimer()">Pause</button>
+      <button onclick="resetTimer()">Reset</button>
+    </div>
+  </section>
+
+  <!-- Progress Tracker -->
+  <section class="card progress" id="progress-section">
+    <h2>Progress Tracker</h2>
+    <div class="card-content">
+      <p>Tasks Completed: <span id="tasks-completed">0</span></p>
+      <p>Total Tasks: <span id="total-tasks">0</span></p>
+      <progress id="progress-bar" value="0" max="100" style="width: 100%; height: 20px;"></progress>
+    </div>
+  </section>
+
+  <!-- Motivational Videos -->
+  <section class="card videos" id="videos-section">
+    <h2>Motivational Videos</h2>
+    <div class="card-content" style="height: 220px;">
+      <iframe width="100%" height="200" src="https://www.youtube.com/embed/ZXsQAXx_ao0" 
+        title="Motivational Video" frameborder="0" allow
