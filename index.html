@@ -9,10 +9,11 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://images.unsplash.com/photo-1556485687-1b08e9d71e36') no-repeat center center fixed;
+      background: url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
       background-size: cover;
       overflow-x: hidden;
       height: 100vh;
+      color: white;
     }
 
     .circle-container {
@@ -26,9 +27,9 @@
 
     .feature {
       position: absolute;
-      width: 150px;
-      height: 150px;
-      background: #fff;
+      width: 130px;
+      height: 130px;
+      background: rgba(255, 255, 255, 0.9);
       color: #333;
       border-radius: 50%;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -48,15 +49,15 @@
     }
 
     .feature i {
-      font-size: 28px;
-      margin-bottom: 8px;
+      font-size: 26px;
+      margin-bottom: 6px;
     }
 
     .center-feature {
       background: rgba(0, 0, 0, 0.6);
       color: white;
-      border-radius: 20px;
-      padding: 30px;
+      border-radius: 16px;
+      padding: 25px;
       max-width: 300px;
       text-align: center;
       font-size: 16px;
@@ -72,7 +73,7 @@
       }
     }
 
-    /* Floating layout */
+    /* Circular positions */
     .circle-container .feature:nth-child(1) { transform: translate(-220px, -220px); background: #f94144; color: white; }
     .circle-container .feature:nth-child(2) { transform: translate(0, -300px); background: #f3722c; color: white; }
     .circle-container .feature:nth-child(3) { transform: translate(220px, -220px); background: #f9844a; color: white; }
@@ -84,7 +85,7 @@
 
     .video-section {
       position: absolute;
-      bottom: 20px;
+      bottom: 10px;
       width: 100%;
       text-align: center;
     }
@@ -95,22 +96,34 @@
       width: 320px;
       height: 180px;
     }
+
+    @media (max-width: 768px) {
+      .feature {
+        width: 100px;
+        height: 100px;
+        font-size: 12px;
+      }
+      .video-section iframe {
+        width: 260px;
+        height: 150px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="circle-container">
     <div class="feature"><i class="fas fa-check-square"></i>To-Do List</div>
-    <div class="feature"><i class="fas fa-calendar-alt"></i>Class Schedule</div>
+    <div class="feature"><i class="fas fa-calendar-alt"></i>Schedule</div>
     <div class="feature"><i class="fas fa-tasks"></i>Assignments</div>
     <div class="feature"><i class="fas fa-bell"></i>Reminders</div>
-    <div class="feature"><i class="fas fa-stopwatch"></i>Pomodoro Timer</div>
-    <div class="feature"><i class="fas fa-chart-line"></i>Progress Tracker</div>
+    <div class="feature"><i class="fas fa-stopwatch"></i>Pomodoro</div>
+    <div class="feature"><i class="fas fa-chart-line"></i>Progress</div>
     <div class="feature"><i class="fas fa-lightbulb"></i>Study Tips</div>
-    <div class="feature"><i class="fas fa-play-circle"></i>Motivational Videos</div>
+    <div class="feature"><i class="fas fa-play-circle"></i>Motivation</div>
 
     <div class="center-feature">
-      <h2>💡 Student Hub</h2>
-      <p>Organize. Focus. Achieve.</p>
+      <h2>📚 Student Hub</h2>
+      <p>Plan. Focus. Succeed.</p>
     </div>
   </div>
 
@@ -119,10 +132,10 @@
   </div>
 
   <script>
-    // Add feature clicks (later expand these)
+    // Click logic
     document.querySelectorAll('.feature').forEach(btn => {
       btn.addEventListener('click', () => {
-        alert('Feature: ' + btn.textContent.trim() + ' clicked!');
+        alert('You clicked on: ' + btn.textContent.trim());
       });
     });
   </script>
