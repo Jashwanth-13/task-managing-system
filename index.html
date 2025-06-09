@@ -1,97 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Student Task Manager</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Student Productivity App</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f3f4f6;
-      padding: 20px;
-    }
-    h1 {
-      color: #333;
-    }
-    #taskInput {
-      padding: 10px;
-      width: 300px;
-      border: 1px solid #aaa;
-      border-radius: 5px;
-    }
-    #addTaskBtn {
-      padding: 10px 15px;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      background: #fff;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .completed {
-      text-decoration: line-through;
-      color: gray;
-    }
-    .deleteBtn {
-      background: #e74c3c;
-      border: none;
-      color: white;
-      padding: 5px 10px;
-      cursor: pointer;
-      border-radius: 3px;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family: "Segoe UI", sans-serif; }
+    body { background:#f4f9ff; color:#333; padding:20px; }
+    header { text-align:center; padding:20px; background:#4a90e2; color:#fff; border-radius:10px; }
+    main { margin-top:20px; }
+    section { background:#fff; padding:15px; margin:15px 0; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+    h2 { margin-bottom:10px; color:#4a90e2; }
+    input, select, textarea, button { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px; }
+    button { background:#4a90e2; color:#fff; cursor:pointer; transition:background .3s; }
+    button:hover { background:#357ab8; }
+    ul { list-style:none; }
+    li { margin:5px 0; padding:8px; background:#e1f0ff; border-radius:5px; display:flex; justify-content:space-between; align-items:center; }
+    .high { border-left:5px solid red; }
+    .medium { border-left:5px solid orange; }
+    .low { border-left:5px solid green; }
+    .completed { text-decoration:line-through; opacity:0.6; }
+    .deleteBtn { background:#e74c3c; border:none; color:#fff; padding:5px 10px; cursor:pointer; border-radius:3px; }
+    #timerDisplay { font-size:2em; text-align:center; margin:10px 0; }
+    .videos iframe { margin:10px; border-radius:8px; width:100%; max-width:300px; height:170px; }
+    #tips li { padding:5px 0; }
+    footer { text-align:center; margin-top:30px; color:#777; }
   </style>
 </head>
 <body>
-  <h1>📘 Student Daily To-Do List</h1>
-  <input type="text" id="taskInput" placeholder="Enter your task..." />
-  <button id="addTaskBtn">Add Task</button>
-  <ul id="taskList"></ul>
+  <header>
+    <h1>📚 Smart Student Productivity App</h1>
+  </header>
+  <main>
+    <!-- 1. To-Do List -->
+    <section>
+      <h2>📝 Daily To‑Do List</h2>
+      <input id="taskInput" placeholder="New task..." />
+      <select id="priority"><option>High</option><option>Medium</option><option>Low</option></select>
+      <button id="addTaskBtn">Add Task</button>
+      <ul id="taskList"></ul>
+    </section>
+
+    <!-- 2. Schedule -->
+    <section>
+      <h2>📅 Class Schedule</h2>
+      <textarea id="schedule" rows="5" placeholder="Mon: Math 10‑11am..."></textarea>
+    </section>
+
+    <!-- 3. Deadlines -->
+    <section>
+      <h2>📌 Assignment / Deadline Tracker</h2>
+      <textarea id="deadlines" rows="4" placeholder="Math HW: Due Jun 15..."></textarea>
+    </section>
+
+    <!-- 4. Reminders -->
+    <section>
+      <h2>⏰ Reminders & Notifications</h2>
+      <input id="reminderInput" placeholder="Reminder text..." />
+      <input type="datetime-local" id="reminderTime" />
+      <button id="setReminder">Set Reminder</button>
+      <ul id="reminderList"></ul>
+    </section>
+
+    <!-- 5. Pomodoro Timer -->
+    <section>
+      <h2>⏱️ Pomodoro Study Timer</h2>
+      <div id="timerDisplay">25:00</div>
+      <button id="startTimer">Start</button>
+      <button id="resetTimer">Reset</button>
+    </section>
+
+    <!-- 6. Progress Tracker -->
+    <section>
+      <h2>📈 Progress Tracker</h2>
+      <progress id="progressBar" value="0" max="100"></progress>
+      <p id="progressText">No tasks yet.</p>
+    </section>
+
+    <!-- 7. Motivational Videos -->
+    <section>
+      <h2>💡 Motivational Videos</h2>
+      <div class="videos">
+        <iframe src="https://www.youtube.com/embed/O96fE1E-rf8" title="Motivation"></iframe>
+        <iframe src="https://www.youtube.com/embed/I6ZA2iQYl9k" title="Study Tips"></iframe>
+      </div>
+    </section>
+
+    <!-- 8. Tips & Tricks -->
+    <section>
+      <h2>📚 Study Tips & Tricks</h2>
+      <ul id="tips">
+        <li>Break study into 25‑minute chunks (Pomodoro).</li>
+        <li>Take short breaks to recharge.</li>
+        <li>Write to-do lists every morning.</li>
+        <li>Keep your study space clean.</li>
+        <li>Practice active recall, not just reading.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made with ❤️ for Students</p>
+  </footer>
 
   <script>
-    const taskInput = document.getElementById("taskInput");
-    const addTaskBtn = document.getElementById("addTaskBtn");
-    const taskList = document.getElementById("taskList");
-
-    addTaskBtn.addEventListener("click", () => {
-      const taskText = taskInput.value.trim();
-      if (taskText === "") return;
-
-      const li = document.createElement("li");
-      const span = document.createElement("span");
-      span.textContent = taskText;
-      span.style.cursor = "pointer";
-
-      // Toggle complete
-      span.addEventListener("click", () => {
-        span.classList.toggle("completed");
-      });
-
-      // Delete button
-      const delBtn = document.createElement("button");
-      delBtn.textContent = "Delete";
-      delBtn.classList.add("deleteBtn");
-      delBtn.addEventListener("click", () => {
-        taskList.removeChild(li);
-      });
-
-      li.appendChild(span);
-      li.appendChild(delBtn);
-      taskList.appendChild(li);
-
+    // To‑Do List
+    const taskInput = document.getElementById("taskInput"),
+          priority = document.getElementById("priority"),
+          addTaskBtn = document.getElementById("addTaskBtn"),
+          taskList = document.getElementById("taskList");
+    function updateProgress() {
+      const total = taskList.children.length;
+      const done = Array.from(taskList.children).filter(li => li.firstChild.classList.contains("completed")).length;
+      const pct = total ? Math.round(done / total * 100) : 0;
+      document.getElementById("progressBar").value = pct;
+      document.getElementById("progressText").textContent = total ? `${done} of ${total} done (${pct}%)` : "No tasks yet.";
+    }
+    addTaskBtn.onclick = () => {
+      const text = taskInput.value.trim();
+      if (!text) return;
+      const li = document.createElement("li"),
+            span = document.createElement("span"),
+            del = document.createElement("button");
+      span.textContent = text;
+      span.className = priority.value.toLowerCase();
+      span.onclick = () => { span.classList.toggle("completed"); updateProgress(); };
+      del.textContent = "Delete";
+      del.className = "deleteBtn";
+      del.onclick = () => { li.remove(); updateProgress(); };
+      li.append(span, del);
+      taskList.append(li);
       taskInput.value = "";
-    });
+      updateProgress();
+    };
+
+    // Reminders
+    const reminderInput = document.getElementById("reminderInput"),
+          reminderTime = document.getElementById("reminderTime"),
+          setReminder = document.getElementById("setReminder"),
+          reminderList = document.getElementById("reminderList");
+    setReminder.onclick = () => {
+      const text = reminderInput.value.trim(), time = new Date(reminderTime.value);
+      if (!text || isNaN(time)) return alert("Enter valid reminder & time");
+      const li = document.createElement("li");
+      li.textContent = `${text} — ${time.toLocaleString()}`;
+      reminderList.append(li);
+      reminderInput.value = "";
+      reminderTime.value = "";
+      setTimeout(() => alert(`⏰ Reminder: ${text}`), time - new Date());
+    };
+
+    // Pomodoro Timer
+    let timer, timeLeft = 1500;
+    const timerDisplay = document.getElementById("timerDisplay"),
+          startTimer = document.getElementById("startTimer"),
+          resetTimer = document.getElementById("resetTimer");
+    function displayTime() {
+      const m = String(Math.floor(timeLeft / 60)).padStart(2, "0"),
+            s = String(timeLeft % 60).padStart(2, "0");
+      timerDisplay.textContent = `${m}:${s}`;
+    }
+    startTimer.onclick = () => {
+      if (timer) return;
+      timer = setInterval(() => {
+        if (timeLeft-- <= 0) { clearInterval(timer); alert("Time’s up! Take a break."); timer = null; timeLeft = 0; }
+        displayTime();
+      }, 1000);
+    };
+    resetTimer.onclick = () => { clearInterval(timer); timer = null; timeLeft = 1500; displayTime(); };
+    displayTime();
   </script>
 </body>
 </html>
