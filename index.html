@@ -4,140 +4,237 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Student Productivity App</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b') no-repeat center center fixed;
       background-size: cover;
       overflow-x: hidden;
-      height: 100vh;
-      color: white;
     }
-
-    .circle-container {
+    h2 {
+      text-align: center;
+      color: #fff;
+      margin-top: 30px;
+    }
+    .circle-menu {
       position: relative;
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 400px;
+      height: 400px;
+      margin: 50px auto;
     }
-
-    .feature {
-      position: absolute;
-      width: 130px;
-      height: 130px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
+    .circle-menu .item {
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      background: #fff;
+      position: absolute;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      transition: transform 0.3s ease, background 0.3s;
+      font-size: 12px;
+      color: #000;
+      transition: transform 0.3s;
       cursor: pointer;
-      font-size: 14px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
     }
-
-    .feature:hover {
-      transform: scale(1.1) rotate(5deg);
-      background-color: #f0f0f0;
+    .circle-menu .item:hover {
+      transform: scale(1.1) rotate(10deg);
     }
-
-    .feature i {
-      font-size: 26px;
-      margin-bottom: 6px;
+    .item i {
+      font-size: 20px;
+      margin-bottom: 5px;
     }
-
-    .center-feature {
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      border-radius: 16px;
-      padding: 25px;
-      max-width: 300px;
-      text-align: center;
-      font-size: 16px;
-      animation: glow 2s infinite alternate;
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
     }
-
-    @keyframes glow {
-      0% {
-        box-shadow: 0 0 10px #00f6ff;
-      }
-      100% {
-        box-shadow: 0 0 30px #00f6ff;
-      }
+    .modal-content {
+      background: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
     }
-
-    /* Circular positions */
-    .circle-container .feature:nth-child(1) { transform: translate(-220px, -220px); background: #f94144; color: white; }
-    .circle-container .feature:nth-child(2) { transform: translate(0, -300px); background: #f3722c; color: white; }
-    .circle-container .feature:nth-child(3) { transform: translate(220px, -220px); background: #f9844a; color: white; }
-    .circle-container .feature:nth-child(4) { transform: translate(300px, 0); background: #43aa8b; color: white; }
-    .circle-container .feature:nth-child(5) { transform: translate(220px, 220px); background: #577590; color: white; }
-    .circle-container .feature:nth-child(6) { transform: translate(0, 300px); background: #277da1; color: white; }
-    .circle-container .feature:nth-child(7) { transform: translate(-220px, 220px); background: #9b5de5; color: white; }
-    .circle-container .feature:nth-child(8) { transform: translate(-300px, 0); background: #8338ec; color: white; }
-
-    .video-section {
-      position: absolute;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
+    .close {
+      float: right;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
     }
-
-    .video-section iframe {
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      width: 320px;
-      height: 180px;
+    .todo-list input, .reminders input {
+      width: 80%;
+      padding: 8px;
     }
-
-    @media (max-width: 768px) {
-      .feature {
-        width: 100px;
-        height: 100px;
-        font-size: 12px;
-      }
-      .video-section iframe {
-        width: 260px;
-        height: 150px;
-      }
+    .todo-list ul, .reminders ul {
+      list-style: none;
+      padding: 0;
+    }
+    .todo-list li, .reminders li {
+      background: #f3f3f3;
+      margin: 5px 0;
+      padding: 5px;
+    }
+    .progress-bar {
+      height: 20px;
+      background: #ddd;
+      border-radius: 10px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: green;
     }
   </style>
 </head>
 <body>
-  <div class="circle-container">
-    <div class="feature"><i class="fas fa-check-square"></i>To-Do List</div>
-    <div class="feature"><i class="fas fa-calendar-alt"></i>Schedule</div>
-    <div class="feature"><i class="fas fa-tasks"></i>Assignments</div>
-    <div class="feature"><i class="fas fa-bell"></i>Reminders</div>
-    <div class="feature"><i class="fas fa-stopwatch"></i>Pomodoro</div>
-    <div class="feature"><i class="fas fa-chart-line"></i>Progress</div>
-    <div class="feature"><i class="fas fa-lightbulb"></i>Study Tips</div>
-    <div class="feature"><i class="fas fa-play-circle"></i>Motivation</div>
 
-    <div class="center-feature">
-      <h2>📚 Student Hub</h2>
-      <p>Plan. Focus. Succeed.</p>
-    </div>
+<h2>📚 Student Productivity App</h2>
+
+<div class="circle-menu">
+  <div class="item" onclick="openModal('todo')" style="top:0;left:145px;background:#ffb347;"><i class="fas fa-list"></i>To-Do</div>
+  <div class="item" onclick="openModal('schedule')" style="top:60px;left:285px;background:#77dd77;"><i class="fas fa-calendar-alt"></i>Schedule</div>
+  <div class="item" onclick="openModal('assignment')" style="top:160px;left:310px;background:#ff6961;"><i class="fas fa-book"></i>Assignments</div>
+  <div class="item" onclick="openModal('reminder')" style="top:260px;left:260px;background:#aqua;"><i class="fas fa-bell"></i>Reminders</div>
+  <div class="item" onclick="openModal('pomodoro')" style="top:310px;left:145px;background:#ffa07a;"><i class="fas fa-clock"></i>Pomodoro</div>
+  <div class="item" onclick="openModal('progress')" style="top:260px;left:20px;background:#cba6f7;"><i class="fas fa-chart-line"></i>Progress</div>
+  <div class="item" onclick="openModal('tips')" style="top:160px;left:-20px;background:#fdfd96;"><i class="fas fa-lightbulb"></i>Tips</div>
+  <div class="item" onclick="openModal('motivation')" style="top:60px;left:20px;background:#87cefa;"><i class="fas fa-video"></i>Motivation</div>
+</div>
+
+<!-- MODALS -->
+
+<div id="todo" class="modal"><div class="modal-content">
+  <span class="close" onclick="closeModal('todo')">&times;</span>
+  <h3>To-Do List</h3>
+  <div class="todo-list">
+    <input id="taskInput" placeholder="Enter task">
+    <button onclick="addTask()">Add</button>
+    <ul id="taskList"></ul>
   </div>
+</div></div>
 
-  <div class="video-section">
-    <iframe src="https://www.youtube.com/embed/UNP03fDSj1U" frameborder="0" allowfullscreen></iframe>
-  </div>
+<div id="schedule" class="modal"><div class="modal-content">
+  <span class="close" onclick="closeModal('schedule')">&times;</span>
+  <h3>Class Schedule</h3>
+  <p>Monday to Friday:<br> You can customize this!</p>
+</div></div>
 
-  <script>
-    // Click logic
-    document.querySelectorAll('.feature').forEach(btn => {
-      btn.addEventListener('click', () => {
-        alert('You clicked on: ' + btn.textContent.trim());
-      });
-    });
-  </script>
+<div id="assignment" class="modal"><div class="modal-content">
+  <span class="close" onclick="closeModal('assignment')">&times;</span>
+  <h3>Assignments</h3>
+  <ul>
+    <li>Physics - 12 June</li>
+    <li>Math - 14 June</li>
+  </ul>
+</div></div>
+
+<div id="reminder" class="modal"><div class="modal-content">
+  <span class="close" onclick="closeModal('reminder')">&times;</span>
+  <h3>Reminders</h3>
+  <input id="reminderInput" placeholder="Reminder...">
+  <button onclick="addReminder()">Add</button>
+  <ul id="reminderList"></ul>
+</div></div>
+
+<div id="pomodoro" class="modal"><div class="modal-content">
+  <span class="close" onclick="closeModal('pomodoro')">&times;</span>
+  <h3>Pomodoro Timer</h3>
+  <p id="timer">25:00</p>
+  <button onclick="startPomodoro()">Start</button>
+</div></div>
+
+<div id="progress" class="modal"><div class="modal-content">
+  <span class="close" onclick="closeModal('progress')">&times;</span>
+  <h3>Progress Tracker</h3>
+  <input id="goalInput" placeholder="Set Goal (in %)">
+  <button onclick="updateProgress()">Update</button>
+  <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+</div></div>
+
+<div id="tips" class="modal"><div class="modal-content">
+  <span class="close" onclick="closeModal('tips')">&times;</span>
+  <h3>Study Tips</h3>
+  <p id="tipText">"Revise regularly!"</p>
+  <button onclick="newTip()">New Tip</button>
+</div></div>
+
+<div id="motivation" class="modal"><div class="modal-content">
+  <span class="close" onclick="closeModal('motivation')">&times;</span>
+  <h3>Motivational Video</h3>
+  <iframe width="100%" height="250" src="https://www.youtube.com/embed/ZXsQAXx_ao0" frameborder="0" allowfullscreen></iframe>
+</div></div>
+
+<script>
+function openModal(id) {
+  document.getElementById(id).style.display = 'block';
+}
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+function addTask() {
+  const task = document.getElementById('taskInput').value;
+  if (task) {
+    const li = document.createElement('li');
+    li.textContent = task;
+    li.onclick = () => li.remove();
+    document.getElementById('taskList').appendChild(li);
+    document.getElementById('taskInput').value = '';
+  }
+}
+
+function addReminder() {
+  const rem = document.getElementById('reminderInput').value;
+  if (rem) {
+    const li = document.createElement('li');
+    li.textContent = rem;
+    li.onclick = () => li.remove();
+    document.getElementById('reminderList').appendChild(li);
+    document.getElementById('reminderInput').value = '';
+  }
+}
+
+let timerInt;
+function startPomodoro() {
+  let time = 1500;
+  timerInt = setInterval(() => {
+    const mins = Math.floor(time / 60);
+    const secs = time % 60;
+    document.getElementById('timer').innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    if (--time < 0) clearInterval(timerInt);
+  }, 1000);
+}
+
+function updateProgress() {
+  const val = document.getElementById('goalInput').value;
+  document.getElementById('progressBar').style.width = val + '%';
+}
+
+const tips = [
+  "Take breaks every 25 minutes.",
+  "Use diagrams to remember better.",
+  "Teach others what you learn.",
+  "Stay hydrated.",
+  "Use past papers to practice.",
+  "Study in a clean space."
+];
+function newTip() {
+  const tip = tips[Math.floor(Math.random() * tips.length)];
+  document.getElementById('tipText').textContent = `"${tip}"`;
+}
+</script>
+
 </body>
 </html>
