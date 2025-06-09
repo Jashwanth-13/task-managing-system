@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Study Buddy - Productivity App</title>
 <style>
-  /* Background and body */
   body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,7 +23,6 @@
     background: rgba(0,0,0,0.6);
     z-index: -1;
   }
-
   h1 {
     text-align: center;
     margin: 30px 0 10px 0;
@@ -40,8 +38,6 @@
     font-size: 1.2rem;
     color: #ddd;
   }
-
-  /* Container to hold all feature cards */
   .container {
     display: flex;
     flex-wrap: wrap;
@@ -51,8 +47,6 @@
     max-width: 1200px;
     margin: 0 auto;
   }
-
-  /* Common card style */
   .card {
     background: rgba(255 255 255 / 0.1);
     border-radius: 15px;
@@ -69,8 +63,6 @@
     transform: translateY(-10px) scale(1.03);
     box-shadow: 0 12px 25px rgba(0,0,0,0.7);
   }
-
-  /* Card distinct colors by feature */
   .todo { border-top: 5px solid #FF6B6B; }
   .schedule { border-top: 5px solid #4ECDC4; }
   .assignment { border-top: 5px solid #FFD93D; color: #333; background: rgba(255 217 61 / 0.15);}
@@ -79,8 +71,6 @@
   .progress { border-top: 5px solid #FFA500; }
   .videos { border-top: 5px solid #6A0572; }
   .tips { border-top: 5px solid #3D3B8E; }
-
-  /* Card headings */
   .card h2 {
     margin-top: 0;
     margin-bottom: 15px;
@@ -88,26 +78,14 @@
     font-size: 1.5rem;
     text-shadow: 0 0 4px rgba(0,0,0,0.6);
   }
-
-  /* Scrollable content in cards if needed */
   .card-content {
     max-height: 260px;
     overflow-y: auto;
   }
-
-  /* Fade in animation for cards */
   @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
   }
-
-  /* Buttons */
   button {
     cursor: pointer;
     background-color: #fff;
@@ -119,13 +97,10 @@
     color: #333;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     transition: background-color 0.3s ease;
+    margin-top: 8px;
   }
-  button:hover {
-    background-color: #f2f2f2;
-  }
-
-  /* Inputs and selects */
-  input[type=text], input[type=date], select {
+  button:hover { background-color: #f2f2f2; }
+  input[type=text], input[type=date], input[type=datetime-local], select {
     width: 100%;
     padding: 8px 10px;
     margin: 8px 0 12px 0;
@@ -134,16 +109,14 @@
     font-size: 1rem;
     box-sizing: border-box;
   }
-
-  /* To-do list items */
-  ul.todo-list {
+  ul.todo-list, ul {
     list-style: none;
     padding-left: 0;
     max-height: 140px;
     overflow-y: auto;
     margin-bottom: 10px;
   }
-  ul.todo-list li {
+  ul.todo-list li, ul li {
     background: rgba(255 255 255 / 0.15);
     margin-bottom: 8px;
     padding: 8px 12px;
@@ -157,15 +130,13 @@
     text-decoration: line-through;
     opacity: 0.6;
   }
-  ul.todo-list li button {
+  ul.todo-list li button, ul li button {
     background: transparent;
     color: #fff;
     border: none;
     font-weight: 700;
     font-size: 1.2rem;
   }
-
-  /* Scrollbar style for lists */
   ::-webkit-scrollbar {
     width: 6px;
   }
@@ -176,17 +147,11 @@
   ::-webkit-scrollbar-track {
     background: transparent;
   }
-
-  /* Responsive */
   @media (max-width: 1000px) {
-    .container {
-      justify-content: center;
-    }
+    .container { justify-content: center; }
   }
   @media (max-width: 680px) {
-    .card {
-      width: 90%;
-    }
+    .card { width: 90%; }
   }
 </style>
 </head>
@@ -197,7 +162,7 @@
 
 <div class="container">
 
-  <!-- Daily To-Do List with Priorities -->
+  <!-- Daily To-Do List -->
   <section class="card todo" id="todo-section">
     <h2>Daily To-Do List</h2>
     <div class="card-content">
@@ -249,26 +214,192 @@
   <section class="card timer" id="timer-section">
     <h2>Pomodoro Study Timer</h2>
     <div class="card-content" style="text-align:center;">
-      <div id="timer-display" style="font-size: 2.8rem; font-weight: 700;">25:00</div>
-      <button onclick="startTimer()">Start</button>
-      <button onclick="pauseTimer()">Pause</button>
-      <button onclick="resetTimer()">Reset</button>
+      <div id="timer-display" style="font-size: 2.8rem; font-weight: 700; margin-bottom: 15px;">25:00</div>
+      <button id="start-btn" onclick="startTimer()">Start</button>
+      <button id="pause-btn" onclick="pauseTimer()" disabled>Pause</button>
+      <button id="reset-btn" onclick="resetTimer()">Reset</button>
     </div>
   </section>
 
-  <!-- Progress Tracker -->
-  <section class="card progress" id="progress-section">
-    <h2>Progress Tracker</h2>
-    <div class="card-content">
-      <p>Tasks Completed: <span id="tasks-completed">0</span></p>
-      <p>Total Tasks: <span id="total-tasks">0</span></p>
-      <progress id="progress-bar" value="0" max="100" style="width: 100%; height: 20px;"></progress>
-    </div>
-  </section>
+</div>
 
-  <!-- Motivational Videos -->
-  <section class="card videos" id="videos-section">
-    <h2>Motivational Videos</h2>
-    <div class="card-content" style="height: 220px;">
-      <iframe width="100%" height="200" src="https://www.youtube.com/embed/ZXsQAXx_ao0" 
-        title="Motivational Video" frameborder="0" allow
+<script>
+  // ====== To-Do List ======
+  const todoInput = document.getElementById('todo-input');
+  const todoList = document.getElementById('todo-list');
+  const prioritySelect = document.getElementById('priority-select');
+
+  function addTask() {
+    const task = todoInput.value.trim();
+    const priority = prioritySelect.value;
+    if (task === '') {
+      alert('Please enter a task.');
+      return;
+    }
+
+    const li = document.createElement('li');
+    li.textContent = `${task} [${priority}]`;
+
+    // Mark completed on click
+    li.addEventListener('click', () => {
+      li.classList.toggle('completed');
+    });
+
+    // Add delete button
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '×';
+    delBtn.title = 'Delete task';
+    delBtn.onclick = (e) => {
+      e.stopPropagation();
+      li.remove();
+    };
+
+    li.appendChild(delBtn);
+    todoList.appendChild(li);
+    todoInput.value = '';
+  }
+
+  // ====== Class Schedule ======
+  const classNameInput = document.getElementById('class-name');
+  const classTimeInput = document.getElementById('class-time');
+  const classList = document.getElementById('class-list');
+
+  function addClass() {
+    const name = classNameInput.value.trim();
+    const time = classTimeInput.value.trim();
+    if (name === '' || time === '') {
+      alert('Please enter both class name and time.');
+      return;
+    }
+    const li = document.createElement('li');
+    li.textContent = `${time} - ${name}`;
+
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '×';
+    delBtn.title = 'Delete class';
+    delBtn.onclick = () => li.remove();
+
+    li.appendChild(delBtn);
+    classList.appendChild(li);
+    classNameInput.value = '';
+    classTimeInput.value = '';
+  }
+
+  // ====== Assignment Tracker ======
+  const assignmentNameInput = document.getElementById('assignment-name');
+  const assignmentDateInput = document.getElementById('assignment-date');
+  const assignmentList = document.getElementById('assignment-list');
+
+  function addAssignment() {
+    const name = assignmentNameInput.value.trim();
+    const date = assignmentDateInput.value;
+    if (name === '' || date === '') {
+      alert('Please enter assignment title and due date.');
+      return;
+    }
+    const li = document.createElement('li');
+    const dueDate = new Date(date);
+    li.textContent = `${name} - Due: ${dueDate.toLocaleDateString()}`;
+
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '×';
+    delBtn.title = 'Delete assignment';
+    delBtn.onclick = () => li.remove();
+
+    li.appendChild(delBtn);
+    assignmentList.appendChild(li);
+    assignmentNameInput.value = '';
+    assignmentDateInput.value = '';
+  }
+
+  // ====== Reminders ======
+  const reminderTextInput = document.getElementById('reminder-text');
+  const reminderTimeInput = document.getElementById('reminder-time');
+  const reminderList = document.getElementById('reminder-list');
+
+  function addReminder() {
+    const text = reminderTextInput.value.trim();
+    const time = reminderTimeInput.value;
+    if (text === '' || time === '') {
+      alert('Please enter reminder text and time.');
+      return;
+    }
+    const li = document.createElement('li');
+    const remindDate = new Date(time);
+    li.textContent = `${text} - At: ${remindDate.toLocaleString()}`;
+
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '×';
+    delBtn.title = 'Delete reminder';
+    delBtn.onclick = () => li.remove();
+
+    li.appendChild(delBtn);
+    reminderList.appendChild(li);
+    reminderTextInput.value = '';
+    reminderTimeInput.value = '';
+  }
+
+  // ====== Pomodoro Timer ======
+  const timerDisplay = document.getElementById('timer-display');
+  const startBtn = document.getElementById('start-btn');
+  const pauseBtn = document.getElementById('pause-btn');
+  const resetBtn = document.getElementById('reset-btn');
+
+  let timerDuration = 25 * 60; // 25 minutes in seconds
+  let timerRemaining = timerDuration;
+  let timerInterval = null;
+
+  function formatTime(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+  }
+
+  function updateDisplay() {
+    timerDisplay.textContent = formatTime(timerRemaining);
+  }
+
+  function startTimer() {
+    if (timerInterval) return; // already running
+
+    startBtn.disabled = true;
+    pauseBtn.disabled = false;
+
+    timerInterval = setInterval(() => {
+      timerRemaining--;
+      updateDisplay();
+      if (timerRemaining <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        alert('Pomodoro session completed! Take a short break.');
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        timerRemaining = timerDuration;
+        updateDisplay();
+      }
+    }, 1000);
+  }
+
+  function pauseTimer() {
+    if (!timerInterval) return;
+
+    clearInterval(timerInterval);
+    timerInterval = null;
+    startBtn.disabled = false;
+    pauseBtn.disabled = true;
+  }
+
+  function resetTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    timerRemaining = timerDuration;
+    updateDisplay();
+    startBtn.disabled = false;
+    pauseBtn.disabled = true;
+  }
+
+  updateDisplay();
+</script>
+
+</body>
+</html>
