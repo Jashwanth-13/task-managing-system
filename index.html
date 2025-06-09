@@ -1,236 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <title>Student Productivity App</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-    body { background: #f3f4f8; color: #333; height: 100vh; overflow: hidden; }
-    #app { display: flex; flex-direction: column; height: 100%; }
-    header {
-      background: #4a90e2; color: #fff; padding: 15px;
-      text-align: center; font-size: 1.2em; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .pages { flex: 1; overflow-y: auto; }
-    .page {
-      display: none; padding: 20px;
-      animation: fadeIn 0.4s ease;
-    }
-    .page.active { display: block; }
-    nav {
-      display: flex; background: #fff; box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-    }
-    nav button {
-      flex: 1; padding: 12px 0; background: none; border: none;
-      font-size: 1em; color: #777; transition: color 0.3s;
-      position: relative;
-    }
-    nav button.active, nav button:hover { color: #4a90e2; }
-    nav button.active::before {
-      content: ''; position: absolute; top: 0; left: 30%; right: 30%;
-      height: 3px; background: #4a90e2; border-radius: 2px;
-    }
-    input, select, textarea, button {
-      width: 100%; padding: 10px; margin: 10px 0;
-      border: 1px solid #ccc; border-radius: 6px;
-    }
-    button { background: #4a90e2; color: #fff; cursor: pointer; transition: background .3s; }
-    button:hover { background: #357ab8; }
-    .todo-item {
-      background: #fff; margin: 8px 0; padding: 12px; border-radius:8px;
-      display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    .todo-item.high { border-left: 6px solid #e74c3c; }
-    .todo-item.medium { border-left: 6px solid #f39c12; }
-    .todo-item.low { border-left: 6px solid #27ae60; }
-    .todo-item.completed { opacity: 0.6; text-decoration: line-through; }
-    .delete-btn {
-      background: #e74c3c; border: none; padding: 6px 10px;
-      color: #fff; border-radius: 4px; cursor: pointer;
-    }
-    .timer-display {
-      font-size: 2.2em; text-align: center; margin: 20px 0;
-      animation: pulse 2s infinite;
-    }
-    progress {
-      width: 100%; height: 14px; border-radius: 7px; overflow: hidden;
-    }
-    progress::-webkit-progress-bar { background: #ddd; }
-    progress::-webkit-progress-value { background: #4a90e2; transition: width .5s ease; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Student Productivity App</title>
+<style>
+  /* Reset & basics */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+  #app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: #6200ea;
+    padding: 1rem;
+    font-size: 1.6rem;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  }
 
-    @keyframes fadeIn { from { opacity: 0.5; } to { opacity: 1; } }
-    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
-  </style>
+  /* Pages container */
+  .pages {
+    flex: 1;
+    overflow-y: auto;
+    background: #1e1e1e;
+    padding: 1rem;
+    animation: fadeIn 0.6s ease;
+  }
+  @keyframes fadeIn {
+    from {opacity:0; transform: translateY(10px);}
+    to {opacity:1; transform: translateY(0);}
+  }
+
+  /* Page styles */
+  .page {
+    display: none;
+  }
+  .page.active {
+    display: block;
+  }
+
+  /* Common inputs and buttons */
+  input[type=text], input[type=date], select {
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    border-radius: 4px;
+    border: none;
+    font-size: 1rem;
+  }
+  button {
+    background: #6200ea;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background: #3700b3;
+  }
+  button:disabled {
+    background: #888;
+    cursor: not-allowed;
+  }
+
+  /* To-Do List */
+  #todo input, #todo select {
+    width: 200px;
+  }
+  .todo-item {
+    background: #2c2c2c;
+    margin: 0.5rem 0;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideIn 0.4s ease forwards;
+  }
+  .todo-item span {
+    flex: 1;
+    cursor: pointer;
+  }
+  .todo-item span.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+  .todo-item.high {
+    border-left: 5px solid #cf6679;
+  }
+  .todo-item.medium {
+    border-left: 5px solid #bb86fc;
+  }
+  .todo-item.low {
+    border-left: 5px solid #03dac6;
+  }
+  .todo-item button.delete-btn {
+    background: transparent;
+    color: #cf6679;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    margin-left: 1rem;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+  .todo-item button.delete-btn:hover {
+    color: #ff4455;
+  }
+  @keyframes slideIn {
+    from {opacity:0; transform: translateX(-20px);}
+    to {opacity:1; transform: translateX(0);}
+  }
+
+  /* Schedule & Deadlines */
+  .item-list {
+    margin-top: 1rem;
+  }
+  .item-list div {
+    background: #2c2c2c;
+    padding: 0.7rem 1rem;
+    margin: 0.4rem 0;
+    border-radius: 6px;
+    animation: slideIn 0.4s ease forwards;
+  }
+
+  /* Reminders */
+  #reminderInput, #reminderTime {
+    width: 180px;
+  }
+
+  /* Timer */
+  #timerDisplay {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    user-select: none;
+    color: #bb86fc;
+    text-shadow: 0 0 8px #bb86fc;
+  }
+  #timerButtons button {
+    margin-right: 1rem;
+  }
+
+  /* Dashboard */
+  #progressContainer {
+    margin-top: 1rem;
+    background: #2c2c2c;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+  progress {
+    width: 100%;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  progress::-webkit-progress-bar {
+    background-color: #444;
+  }
+  progress::-webkit-progress-value {
+    background-color: #bb86fc;
+  }
+
+  /* Videos */
+  #videosList iframe {
+    width: 100%;
+    height: 180px;
+    margin: 0.5rem 0;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(187,134,252,0.5);
+  }
+
+  /* Tips */
+  #tipsList {
+    margin-top: 1rem;
+    line-height: 1.6;
+  }
+  #tipsList li {
+    margin-bottom: 0.8rem;
+  }
+
+  /* Bottom Nav */
+  nav {
+    background: #2c2c2c;
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5rem 0;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.6);
+  }
+  nav button {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+  }
+  nav button.active, nav button:hover {
+    background: #bb86fc;
+    color: #121212;
+  }
+
+  /* Scrollbar for pages */
+  .pages::-webkit-scrollbar {
+    width: 8px;
+  }
+  .pages::-webkit-scrollbar-thumb {
+    background: #6200ea;
+    border-radius: 10px;
+  }
+</style>
 </head>
 <body>
-  <div id="app">
-    <header>📚 Student Productivity</header>
-    <div class="pages">
-      <div id="todo" class="page active">
-        <input id="taskInput" placeholder="New task...">
-        <select id="priority"><option>High</option><option>Medium</option><option>Low</option></select>
-        <button id="addTaskBtn">Add To‑Do</button>
-        <div id="taskList"></div>
+<div id="app">
+  <header>📚 Student Productivity App</header>
+
+  <div class="pages">
+    <!-- To-Do List -->
+    <section id="todo" class="page active">
+      <h2>Daily To-Do List</h2>
+      <div>
+        <input type="text" id="taskInput" placeholder="Add new task..." />
+        <select id="priority">
+          <option value="high">High Priority</option>
+          <option value="medium" selected>Medium Priority</option>
+          <option value="low">Low Priority</option>
+        </select>
+        <button id="addTaskBtn">Add Task</button>
       </div>
+      <div id="taskList" class="item-list" aria-live="polite"></div>
+    </section>
 
-      <div id="schedule" class="page">
-        <textarea rows="6" placeholder="Mon: Math 10‑11am..."></textarea>
+    <!-- Class Schedule Organizer -->
+    <section id="schedule" class="page">
+      <h2>Class Schedule Organizer</h2>
+      <div>
+        <input type="text" id="className" placeholder="Class Name" />
+        <input type="text" id="classTime" placeholder="Time (e.g. Mon 9-10am)" />
+        <button id="addClassBtn">Add Class</button>
       </div>
+      <div id="scheduleList" class="item-list" aria-live="polite"></div>
+    </section>
 
-      <div id="deadlines" class="page">
-        <textarea rows="4" placeholder="History Essay: June 20"></textarea>
+    <!-- Assignment / Deadline Tracker -->
+    <section id="deadlines" class="page">
+      <h2>Assignment / Deadline Tracker</h2>
+      <div>
+        <input type="text" id="assignmentName" placeholder="Assignment Title" />
+        <input type="date" id="assignmentDue" />
+        <button id="addAssignmentBtn">Add Assignment</button>
       </div>
+      <div id="assignmentList" class="item-list" aria-live="polite"></div>
+    </section>
 
-      <div id="reminders" class="page">
-        <input id="reminderInput" placeholder="Reminder text...">
-        <input type="datetime-local" id="reminderTime">
-        <button id="setReminder">Set Reminder</button>
-        <div id="reminderList"></div>
+    <!-- Reminders & Notifications -->
+    <section id="reminders" class="page">
+      <h2>Reminders & Notifications</h2>
+      <div>
+        <input type="text" id="reminderInput" placeholder="Reminder text" />
+        <input type="time" id="reminderTime" />
+        <button id="addReminderBtn">Set Reminder</button>
       </div>
+      <div id="reminderList" class="item-list" aria-live="polite"></div>
+    </section>
 
-      <div id="timer" class="page">
-        <div class="timer-display" id="timerDisplay">25:00</div>
-        <button id="startTimer">Start</button>
-        <button id="resetTimer">Reset</button>
-      </div>
-
-      <div id="dashboard" class="page">
-        <progress id="progressBar" value="0" max="100"></progress>
-        <p id="progressText">0%</p>
-      </div>
-
-      <div id="videos" class="page">
-        <iframe width="100%" height="200" src="https://www.youtube.com/embed/O96fE1E-rf8"></iframe>
-        <iframe width="100%" height="200" src="https://www.youtube.com/embed/I6ZA2iQYl9k"></iframe>
-      </div>
-
-      <div id="tips" class="page">
-        <ul>
-          <li>Use Pomodoro technique</li>
-          <li>Take short breaks</li>
-          <li>Make daily plans</li>
-          <li>Stay organized</li>
-          <li>Try active recall</li>
-        </ul>
-      </div>
-    </div>
-
-    <nav>
-      <button class="active" data-tab="todo">To-Do</button>
-      <button data-tab="schedule">Schedule</button>
-      <button data-tab="deadlines">Deadlines</button>
-      <button data-tabs="reminders">Reminders</button>
-      <button data-tab="timer">Timer</button>
-      <button data-tab="dashboard">Dashboard</button>
-      <button data-tab="videos">Videos</button>
-      <button data-tab="tips">Tips</button>
-    </nav>
-  </div>
-
-  <script>
-    // Tab navigation
-    document.querySelectorAll('nav button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
-      });
-    });
-
-    // To-Do + Dashboard
-    const taskInput = document.getElementById("taskInput"),
-          priority = document.getElementById("priority"),
-          addTaskBtn = document.getElementById("addTaskBtn"),
-          taskList = document.getElementById("taskList"),
-          progressBar = document.getElementById("progressBar"),
-          progressText = document.getElementById("progressText");
-
-    function updateProgress() {
-      const items = Array.from(taskList.children);
-      const total = items.length;
-      const done = items.filter(div => div.querySelector('span').classList.contains('completed')).length;
-      const pct = total ? Math.round(done/total*100) : 0;
-      progressBar.value = pct;
-      progressText.textContent = `${pct}% (${done}/${total})`;
-    }
-
-    addTaskBtn.addEventListener('click', () => {
-      const text = taskInput.value.trim();
-      if (!text) return;
-      const div = document.createElement('div');
-      div.className = `todo-item ${priority.value.toLowerCase()}`;
-      const span = document.createElement('span');
-      span.textContent = text;
-      span.addEventListener('click', () => {
-        span.classList.toggle('completed');
-        updateProgress();
-      });
-      const del = document.createElement('button');
-      del.className = 'delete-btn';
-      del.textContent = 'Delete';
-      del.addEventListener('click', () => {
-        div.remove(); updateProgress();
-      });
-      div.append(span, del);
-      taskList.append(div);
-      taskInput.value = '';
-      updateProgress();
-    });
-
-    // Reminders
-    const reminderInput = document.getElementById("reminderInput"),
-          reminderTime = document.getElementById("reminderTime"),
-          setReminder = document.getElementById("setReminder"),
-          reminderList = document.getElementById("reminderList");
-
-    setReminder.addEventListener('click', () => {
-      const text = reminderInput.value.trim();
-      const time = new Date(reminderTime.value);
-      if (!text || isNaN(time)) return alert("Invalid reminder/time");
-      const div = document.createElement('div');
-      div.textContent = `${text} @ ${time.toLocaleString()}`;
-      reminderList.append(div);
-      reminderInput.value = '';
-      reminderTime.value = '';
-      setTimeout(() => alert(`🔔 Reminder: ${text}`), time - new Date());
-    });
-
-    // Pomodoro Timer
-    let timer, timeLeft = 25 * 60;
-    const timerDisplay = document.getElementById("timerDisplay"),
-          startTimer = document.getElementById("startTimer"),
-          resetTimer = document.getElementById("resetTimer");
-
-    function displayTime() {
-      const m = String(Math.floor(timeLeft/60)).padStart(2,'0');
-      const s = String(timeLeft % 60).padStart(2,'0');
-      timerDisplay.textContent = `${m}:${s}`;
-    }
-
-    startTimer.addEventListener('click', () => {
-      if (timer) return;
-      timer = setInterval(() => {
-        if (timeLeft-- <= 0) {
-          clearInterval(timer);
-          timer = null;
-          timeLeft = 25*60;
-          alert("✅ Time’s up! Take a break.");
-        }
-        displayTime();
-      }, 1000);
-    });
-
-    resetTimer.addEventListener('click', () => {
-      clearInterval(timer);
-      timer = null;
-      timeLeft = 25 * 60;
-      displayTime();
-    });
-
-    displayTime();
-  </script>
-</body>
-</html>
+    <!-- Study Timer (Pomodoro) -->
+    <section id="timer" class="page">
+      <h2>Study Timer (Pomodoro)</h2>
+      <div id="timerDisplay">25:00</div>
+      <div id="timerButtons">
+        <button id="startTimerBtn">Start</button>
+        <button id="pauseTimerBtn" disabled>Pause</button>
+        <button id="resetTimerBtn">Reset</button>
+     
