@@ -71,15 +71,16 @@
       font-weight: bold;
       cursor: pointer;
     }
-    .todo-list input, .reminders input {
+    input {
       width: 80%;
       padding: 8px;
+      margin-bottom: 10px;
     }
-    .todo-list ul, .reminders ul {
+    ul {
       list-style: none;
       padding: 0;
     }
-    .todo-list li, .reminders li {
+    li {
       background: #f3f3f3;
       margin: 5px 0;
       padding: 5px;
@@ -113,22 +114,20 @@
   <div class="item" onclick="openModal('motivation')" style="top:60px;left:20px;background:#87cefa;"><i class="fas fa-video"></i>Motivation</div>
 </div>
 
-<!-- MODALS -->
-
+<!-- Modals -->
 <div id="todo" class="modal"><div class="modal-content">
   <span class="close" onclick="closeModal('todo')">&times;</span>
   <h3>To-Do List</h3>
-  <div class="todo-list">
-    <input id="taskInput" placeholder="Enter task">
-    <button onclick="addTask()">Add</button>
-    <ul id="taskList"></ul>
-  </div>
+  <input id="taskInput" placeholder="Enter task"><button onclick="addTask()">Add</button>
+  <ul id="taskList"></ul>
 </div></div>
 
 <div id="schedule" class="modal"><div class="modal-content">
   <span class="close" onclick="closeModal('schedule')">&times;</span>
   <h3>Class Schedule</h3>
-  <p>Monday to Friday:<br> You can customize this!</p>
+  <input id="scheduleInput" placeholder="e.g. Mon 10AM - Math">
+  <button onclick="addSchedule()">Add</button>
+  <ul id="scheduleList"></ul>
 </div></div>
 
 <div id="assignment" class="modal"><div class="modal-content">
@@ -143,8 +142,7 @@
 <div id="reminder" class="modal"><div class="modal-content">
   <span class="close" onclick="closeModal('reminder')">&times;</span>
   <h3>Reminders</h3>
-  <input id="reminderInput" placeholder="Reminder...">
-  <button onclick="addReminder()">Add</button>
+  <input id="reminderInput" placeholder="Reminder..."><button onclick="addReminder()">Add</button>
   <ul id="reminderList"></ul>
 </div></div>
 
@@ -206,9 +204,21 @@ function addReminder() {
   }
 }
 
+function addSchedule() {
+  const schedule = document.getElementById('scheduleInput').value;
+  if (schedule) {
+    const li = document.createElement('li');
+    li.textContent = schedule;
+    li.onclick = () => li.remove();
+    document.getElementById('scheduleList').appendChild(li);
+    document.getElementById('scheduleInput').value = '';
+  }
+}
+
 let timerInt;
 function startPomodoro() {
   let time = 1500;
+  clearInterval(timerInt);
   timerInt = setInterval(() => {
     const mins = Math.floor(time / 60);
     const secs = time % 60;
