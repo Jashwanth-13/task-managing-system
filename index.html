@@ -84,6 +84,7 @@
       background: #f3f3f3;
       margin: 5px 0;
       padding: 5px;
+      cursor: pointer;
     }
     .progress-bar {
       height: 20px;
@@ -114,7 +115,7 @@
   <div class="item" onclick="openModal('motivation')" style="top:60px;left:20px;background:#87cefa;"><i class="fas fa-video"></i>Motivation</div>
 </div>
 
-<!-- Modals -->
+<!-- To-Do Modal -->
 <div id="todo" class="modal"><div class="modal-content">
   <span class="close" onclick="closeModal('todo')">&times;</span>
   <h3>To-Do List</h3>
@@ -122,6 +123,7 @@
   <ul id="taskList"></ul>
 </div></div>
 
+<!-- Schedule Modal -->
 <div id="schedule" class="modal"><div class="modal-content">
   <span class="close" onclick="closeModal('schedule')">&times;</span>
   <h3>Class Schedule</h3>
@@ -130,15 +132,16 @@
   <ul id="scheduleList"></ul>
 </div></div>
 
+<!-- Assignments Modal -->
 <div id="assignment" class="modal"><div class="modal-content">
   <span class="close" onclick="closeModal('assignment')">&times;</span>
   <h3>Assignments</h3>
-  <ul>
-    <li>Physics - 12 June</li>
-    <li>Math - 14 June</li>
-  </ul>
+  <input id="assignmentInput" placeholder="e.g. Physics - 12 June">
+  <button onclick="addAssignment()">Add</button>
+  <ul id="assignmentList"></ul>
 </div></div>
 
+<!-- Reminders Modal -->
 <div id="reminder" class="modal"><div class="modal-content">
   <span class="close" onclick="closeModal('reminder')">&times;</span>
   <h3>Reminders</h3>
@@ -146,6 +149,7 @@
   <ul id="reminderList"></ul>
 </div></div>
 
+<!-- Pomodoro Timer Modal -->
 <div id="pomodoro" class="modal"><div class="modal-content">
   <span class="close" onclick="closeModal('pomodoro')">&times;</span>
   <h3>Pomodoro Timer</h3>
@@ -153,6 +157,7 @@
   <button onclick="startPomodoro()">Start</button>
 </div></div>
 
+<!-- Progress Tracker -->
 <div id="progress" class="modal"><div class="modal-content">
   <span class="close" onclick="closeModal('progress')">&times;</span>
   <h3>Progress Tracker</h3>
@@ -161,6 +166,7 @@
   <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
 </div></div>
 
+<!-- Tips -->
 <div id="tips" class="modal"><div class="modal-content">
   <span class="close" onclick="closeModal('tips')">&times;</span>
   <h3>Study Tips</h3>
@@ -168,6 +174,7 @@
   <button onclick="newTip()">New Tip</button>
 </div></div>
 
+<!-- Motivation Video -->
 <div id="motivation" class="modal"><div class="modal-content">
   <span class="close" onclick="closeModal('motivation')">&times;</span>
   <h3>Motivational Video</h3>
@@ -212,6 +219,17 @@ function addSchedule() {
     li.onclick = () => li.remove();
     document.getElementById('scheduleList').appendChild(li);
     document.getElementById('scheduleInput').value = '';
+  }
+}
+
+function addAssignment() {
+  const assgn = document.getElementById('assignmentInput').value;
+  if (assgn) {
+    const li = document.createElement('li');
+    li.textContent = assgn;
+    li.onclick = () => li.remove();
+    document.getElementById('assignmentList').appendChild(li);
+    document.getElementById('assignmentInput').value = '';
   }
 }
 
