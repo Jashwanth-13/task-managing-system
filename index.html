@@ -2,267 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Student Productivity App</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b') no-repeat center center fixed;
-      background-size: cover;
-      overflow-x: hidden;
-    }
-    h2 {
-      text-align: center;
-      color: #fff;
-      margin-top: 30px;
-    }
-    .circle-menu {
-      position: relative;
-      width: 400px;
-      height: 400px;
-      margin: 50px auto;
-    }
-    .circle-menu .item {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      background: #fff;
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 12px;
-      color: #000;
-      transition: transform 0.3s;
-      cursor: pointer;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-    }
-    .circle-menu .item:hover {
-      transform: scale(1.1) rotate(10deg);
-    }
-    .item i {
-      font-size: 20px;
-      margin-bottom: 5px;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 100;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.7);
-    }
-    .modal-content {
-      background: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 500px;
-    }
-    .close {
-      float: right;
-      font-size: 22px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    input {
-      width: 80%;
-      padding: 8px;
-      margin-bottom: 10px;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      background: #f3f3f3;
-      margin: 5px 0;
-      padding: 5px;
-      cursor: pointer;
-    }
-    .progress-bar {
-      height: 20px;
-      background: #ddd;
-      border-radius: 10px;
-      margin-top: 10px;
-      overflow: hidden;
-    }
-    .progress {
-      height: 100%;
-      width: 0%;
-      background: green;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neon Study App</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
+  <div class="navbar">
+    <h1>Neon Study</h1>
+    <nav>
+      <a href="reader.html">Document Reader</a>
+      <a href="#">To-Do List</a>
+      <a href="#">Assignments</a>
+      <a href="#">Timer</a>
+      <a href="#">Logout</a>
+    </nav>
+  </div>
 
-<h2>📚 Student Productivity App</h2>
+  <section class="hero">
+    <canvas id="bg3d"></canvas>
+    <div class="content">
+      <h2>Welcome to <span>Neon Study</span></h2>
+      <p>Organize. Track. Achieve.</p>
+    </div>
+  </section>
 
-<div class="circle-menu">
-  <div class="item" onclick="openModal('todo')" style="top:0;left:145px;background:#ffb347;"><i class="fas fa-list"></i>To-Do</div>
-  <div class="item" onclick="openModal('schedule')" style="top:60px;left:285px;background:#77dd77;"><i class="fas fa-calendar-alt"></i>Schedule</div>
-  <div class="item" onclick="openModal('assignment')" style="top:160px;left:310px;background:#ff6961;"><i class="fas fa-book"></i>Assignments</div>
-  <div class="item" onclick="openModal('reminder')" style="top:260px;left:260px;background:#aqua;"><i class="fas fa-bell"></i>Reminders</div>
-  <div class="item" onclick="openModal('pomodoro')" style="top:310px;left:145px;background:#ffa07a;"><i class="fas fa-clock"></i>Pomodoro</div>
-  <div class="item" onclick="openModal('progress')" style="top:260px;left:20px;background:#cba6f7;"><i class="fas fa-chart-line"></i>Progress</div>
-  <div class="item" onclick="openModal('tips')" style="top:160px;left:-20px;background:#fdfd96;"><i class="fas fa-lightbulb"></i>Tips</div>
-  <div class="item" onclick="openModal('motivation')" style="top:60px;left:20px;background:#87cefa;"><i class="fas fa-video"></i>Motivation</div>
-</div>
-
-<!-- To-Do Modal -->
-<div id="todo" class="modal"><div class="modal-content">
-  <span class="close" onclick="closeModal('todo')">&times;</span>
-  <h3>To-Do List</h3>
-  <input id="taskInput" placeholder="Enter task"><button onclick="addTask()">Add</button>
-  <ul id="taskList"></ul>
-</div></div>
-
-<!-- Schedule Modal -->
-<div id="schedule" class="modal"><div class="modal-content">
-  <span class="close" onclick="closeModal('schedule')">&times;</span>
-  <h3>Class Schedule</h3>
-  <input id="scheduleInput" placeholder="e.g. Mon 10AM - Math">
-  <button onclick="addSchedule()">Add</button>
-  <ul id="scheduleList"></ul>
-</div></div>
-
-<!-- Assignments Modal -->
-<div id="assignment" class="modal"><div class="modal-content">
-  <span class="close" onclick="closeModal('assignment')">&times;</span>
-  <h3>Assignments</h3>
-  <input id="assignmentInput" placeholder="e.g. Physics - 12 June">
-  <button onclick="addAssignment()">Add</button>
-  <ul id="assignmentList"></ul>
-</div></div>
-
-<!-- Reminders Modal -->
-<div id="reminder" class="modal"><div class="modal-content">
-  <span class="close" onclick="closeModal('reminder')">&times;</span>
-  <h3>Reminders</h3>
-  <input id="reminderInput" placeholder="Reminder..."><button onclick="addReminder()">Add</button>
-  <ul id="reminderList"></ul>
-</div></div>
-
-<!-- Pomodoro Timer Modal -->
-<div id="pomodoro" class="modal"><div class="modal-content">
-  <span class="close" onclick="closeModal('pomodoro')">&times;</span>
-  <h3>Pomodoro Timer</h3>
-  <p id="timer">25:00</p>
-  <button onclick="startPomodoro()">Start</button>
-</div></div>
-
-<!-- Progress Tracker -->
-<div id="progress" class="modal"><div class="modal-content">
-  <span class="close" onclick="closeModal('progress')">&times;</span>
-  <h3>Progress Tracker</h3>
-  <input id="goalInput" placeholder="Set Goal (in %)">
-  <button onclick="updateProgress()">Update</button>
-  <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
-</div></div>
-
-<!-- Tips -->
-<div id="tips" class="modal"><div class="modal-content">
-  <span class="close" onclick="closeModal('tips')">&times;</span>
-  <h3>Study Tips</h3>
-  <p id="tipText">"Revise regularly!"</p>
-  <button onclick="newTip()">New Tip</button>
-</div></div>
-
-<!-- Motivation Video -->
-<div id="motivation" class="modal"><div class="modal-content">
-  <span class="close" onclick="closeModal('motivation')">&times;</span>
-  <h3>Motivational Video</h3>
-  <iframe width="100%" height="250" src="https://www.youtube.com/embed/ZXsQAXx_ao0" frameborder="0" allowfullscreen></iframe>
-</div></div>
-
-<script>
-function openModal(id) {
-  document.getElementById(id).style.display = 'block';
-}
-function closeModal(id) {
-  document.getElementById(id).style.display = 'none';
-}
-
-function addTask() {
-  const task = document.getElementById('taskInput').value;
-  if (task) {
-    const li = document.createElement('li');
-    li.textContent = task;
-    li.onclick = () => li.remove();
-    document.getElementById('taskList').appendChild(li);
-    document.getElementById('taskInput').value = '';
-  }
-}
-
-function addReminder() {
-  const rem = document.getElementById('reminderInput').value;
-  if (rem) {
-    const li = document.createElement('li');
-    li.textContent = rem;
-    li.onclick = () => li.remove();
-    document.getElementById('reminderList').appendChild(li);
-    document.getElementById('reminderInput').value = '';
-  }
-}
-
-function addSchedule() {
-  const schedule = document.getElementById('scheduleInput').value;
-  if (schedule) {
-    const li = document.createElement('li');
-    li.textContent = schedule;
-    li.onclick = () => li.remove();
-    document.getElementById('scheduleList').appendChild(li);
-    document.getElementById('scheduleInput').value = '';
-  }
-}
-
-function addAssignment() {
-  const assgn = document.getElementById('assignmentInput').value;
-  if (assgn) {
-    const li = document.createElement('li');
-    li.textContent = assgn;
-    li.onclick = () => li.remove();
-    document.getElementById('assignmentList').appendChild(li);
-    document.getElementById('assignmentInput').value = '';
-  }
-}
-
-let timerInt;
-function startPomodoro() {
-  let time = 1500;
-  clearInterval(timerInt);
-  timerInt = setInterval(() => {
-    const mins = Math.floor(time / 60);
-    const secs = time % 60;
-    document.getElementById('timer').innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    if (--time < 0) clearInterval(timerInt);
-  }, 1000);
-}
-
-function updateProgress() {
-  const val = document.getElementById('goalInput').value;
-  document.getElementById('progressBar').style.width = val + '%';
-}
-
-const tips = [
-  "Take breaks every 25 minutes.",
-  "Use diagrams to remember better.",
-  "Teach others what you learn.",
-  "Stay hydrated.",
-  "Use past papers to practice.",
-  "Study in a clean space."
-];
-function newTip() {
-  const tip = tips[Math.floor(Math.random() * tips.length)];
-  document.getElementById('tipText').textContent = `"${tip}"`;
-}
-</script>
-
+  <script src="js/app.js"></script>
 </body>
 </html>
